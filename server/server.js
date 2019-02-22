@@ -2,6 +2,12 @@ import fs from 'fs';
 import config from '../config/config';
 import path from 'path';
 
+// ------------------------------------------------------------------------+
+import Cookies from 'cookies';
+import { getStoredState } from 'redux-persist'; // https://github.com/rt2zz/redux-persist
+import { CookieStorage, NodeCookiesWrapper } from 'redux-persist-cookie-storage'; // https://github.com/abersager/redux-persist-cookie-storage
+// ------------------------------------------------------------------------+
+
 import React from 'react';
 
 // ----------------------------------
@@ -88,6 +94,43 @@ export default ({ clientStats }) => async (req, res) => {
   const history = createMemoryHistory({ initialEntries: [req.originalUrl] });
 
   console.log('>>>>>>>>>>>>>>>>>>> SERVER.JS > APP LOADER > history: ', history)
+
+  // ------------------------------------------------------------------------+
+  const cookieJar = new NodeCookiesWrapper(new Cookies(req, res)); // node module for getting and setting HTTP cookies
+
+  // type PersistConfig:
+  // {
+  //   key: string, // the key for the persist
+  //   storage: Object, // the storage adapter, following the AsyncStorage api
+  //   version?: number, // the state version as an integer (defaults to -1)
+  //   blacklist?: Array<string>, // do not persist these keys
+  //   whitelist?: Array<string>, // only persist these keys
+  //   migrate?: (Object, number) => Promise<Object>,
+  //   transforms?: Array<Transform>,
+  //   throttle?: number, // ms to throttle state writes
+  //   keyPrefix?: string, // will be prefixed to the storage key
+  //   debug?: boolean, // true -> verbose logs
+  //   stateReconciler?: false | StateReconciler, // false -> do not automatically reconcile state
+  //   serialize?: boolean, // false -> do not call JSON.parse & stringify when setting & getting from storage
+  //   writeFailHandler?: Function, // will be called if the storage engine fails during setItem()
+  // }
+
+  const persistConfig = {
+    key: 'root',
+    storage: new CookieStorage(cookieJar),
+    stateReconciler: (inboundState, originalState) => originalState,
+    whitelist: ['auth', 'info',]
+  };
+
+  let preloadedState;
+
+  // try {
+  //   // Returns a promise of restored state (getStoredState())
+  //   preloadedState = await getStoredState(persistConfig);
+  // } catch (e) {
+  //   preloadedState = {};
+  // }
+  // ------------------------------------------------------------------------+
 
   try {
 
