@@ -78,7 +78,7 @@ const Html = ({ assets, store, content }) => {
 Html.propTypes = {
   assets: PropTypes.shape({ stylesheets: PropTypes.array, scripts: PropTypes.array }),
   content: PropTypes.string,
-  store: PropTypes.shape({ getState: PropTypes.func }).isRequired,
+  store: PropTypes.shape({ getState: PropTypes.func })
 };
 
 Html.defaultProps = {
