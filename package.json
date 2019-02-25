@@ -2,8 +2,8 @@
   "private": true,
   "name": "bootstrap-react-redux-webpack-ssr-eight",
   "version": "0.0.1",
-  "main": "bin/server.js",
   "description": "Applying thunk middleware for Redux.",
+  "main": "bin/server.js",
   "author": "dev",
   "license": "MIT",
   "scripts": {
@@ -83,7 +83,7 @@
     "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.3.1",
     "react-select": "^2.4.0",
-    "react-universal-component": "^3.0.3",
+    "react-universal-component": "^4.0.0",
     "recompose": "^0.30.0",
     "redial": "^0.5.0",
     "redux": "^4.0.1",
