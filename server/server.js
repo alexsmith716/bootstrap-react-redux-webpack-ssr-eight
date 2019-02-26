@@ -46,6 +46,16 @@ import Html from '../server/utils/Html';
 // ------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------
 
+function reactDOMRenderToString(o, c, r) {
+  return (
+    <StaticRouter location={o} context={c}>
+      <ReduxAsyncConnect routes={r} >
+        {renderRoutes(r)}
+      </ReduxAsyncConnect>
+    </StaticRouter>
+  );
+}
+
 export default ({ clientStats }) => async (req, res) => {
 
   console.log('>>>>>>>>>>>>>>>>> SERVER > __CLIENT__ ?: ', __CLIENT__);
@@ -124,6 +134,28 @@ export default ({ clientStats }) => async (req, res) => {
 
   let preloadedState;
 
+  const context = {};
+
+  // ===============================================================================
+  // ===============================================================================
+
+  console.log('>>>>>>>>>>>>>>>>> SERVER > SPA > __DISABLE_SSR__:', __DISABLE_SSR__);
+
+  function hydrate(a) {
+    res.write('<!doctype html>');
+    ReactDOM.renderToNodeStream(<Html assets={a} />).pipe(res);
+  }
+
+  if (__DISABLE_SSR__) {
+
+    ReactDOM.renderToString( reactDOMRenderToString(req.originalUrl, context, routes) );
+
+    return hydrate( flushChunks(clientStats, {chunkNames: flushChunkNames()}) );
+  }
+
+  // ===============================================================================
+  // ===============================================================================
+
   // try {
   //   // Returns a promise of restored state (getStoredState())
   //   preloadedState = await getStoredState(persistConfig);
@@ -150,8 +182,6 @@ export default ({ clientStats }) => async (req, res) => {
     await trigger( 'fetch', components, locals);
 
     // const chunkNames = [];
-    const context = {};
-
     // build step and render step ARE separate
     // const component = (
     //   <ReportChunks report={chunkName => chunkNames.push(chunkName)}>
@@ -160,63 +190,14 @@ export default ({ clientStats }) => async (req, res) => {
     // );
 
     // build step and render step NOT separate
-    const component = (
-      <StaticRouter location={req.originalUrl} context={context}>
-        <ReduxAsyncConnect routes={routes} >
-          {renderRoutes(routes)}
-        </ReduxAsyncConnect>
-      </StaticRouter>
-    );
+    const component = ( reactDOMRenderToString(req.originalUrl, context, routes) );
   
     const content = ReactDOM.renderToString(component);
 
     // ------------------------------------------------------------------------------------------------------
 
-    // array of chunks flushed from react-universal-component
-    const chunkNames = flushChunkNames();
 
-    console.log('>>>>>>>>>>>>>>>>> SERVER > chunkNames: ', chunkNames);
-
-    // flushChunks and flushFiles: called immediately after ReactDOMServer.renderToString. 
-    // They are used in server-rendering to extract the minimal amount of chunks to send to the client, 
-    // thereby solving a missing piece for code-splitting: server-side rendering
-
-    // ------------------------------------------------------------------------------------------------------
-
-    // const flushedFiles = flushFiles(clientStats, { chunkNames });
-    // const flushedFilesFilter = flushedFiles.filter(file => file.endsWith('.js') || file.endsWith('.css') || file.endsWith('.map'));
-
-    // console.log('>>>>>>>>>>>>>>>>> SERVER > flushFiles > flushedFiles: ', flushedFiles);
-    // console.log('>>>>>>>>>>>>>>>>> SERVER > flushFiles > flushedFilesFilter: ', flushedFilesFilter);
-
-    // -----------------------------------------------------------------------------
-
-    const assets = flushChunks(clientStats, { chunkNames });
-
-    // const assets = {
-    //   // react components:
-    //   Js,                // javascript chunks
-    //   Styles,            // external stylesheets
-    //   Css,               // raw css
-    // 
-    //   // strings:
-    //   js,                // javascript chunks
-    //   styles,            // external stylesheets
-    //   css,               // raw css
-    // 
-    //   // arrays of file names:
-    //   scripts,
-    //   stylesheets,
-    // 
-    //   // cssHash for use with babel-plugin-dual-import:
-    //   cssHashRaw,        // hash object of chunk names to css file paths
-    //   cssHash,           // string: <script>window.__CSS_CHUNKS__ = ${JSON.stringify(cssHashRaw)}</script>
-    //   CssHash,           // react component of above
-    // 
-    //   // important paths:
-    //   publicPath,
-    //   outputPath
-    // } = flushChunks( clientStats, { chunkNames } )
+    const assets = flushChunks(clientStats, {chunkNames: flushChunkNames()});
 
     console.log('>>>>>>>>>>>>>>>>> SERVER > flushChunks > JS: ', assets.Js);
     console.log('>>>>>>>>>>>>>>>>> SERVER > flushChunks > STYLES: ', assets.Styles);
@@ -237,23 +218,6 @@ export default ({ clientStats }) => async (req, res) => {
     console.log('>>>>>>>>>>>>>>>>> SERVER > flushChunks > outputPath: ', assets.outputPath);
 
     // ======================================================================================
-    // ======================================================================================
-    // ======================================================================================
-
-    function hydrate() {
-      res.write('<!doctype html>');
-      ReactDOM.renderToNodeStream(<Html assets={assets} />).pipe(res);
-    }
-
-    console.log('>>>>>>>>>>>>>>>>> SERVER > __DISABLE_SSR__:', __DISABLE_SSR__);
-
-    if (__DISABLE_SSR__) {
-      return hydrate();
-    }
-
-    // ======================================================================================
-    // ======================================================================================
-    // ======================================================================================
 
     // console.log('>>>>>>>>>>>>>>>> SERVER > APP LOADER > context: ', context);
 
@@ -263,7 +227,7 @@ export default ({ clientStats }) => async (req, res) => {
 
     // ------------------------------------------------------------------------------------------------------
 
-    console.log('>>>>>>>>>>>>>>>> SERVER > ==================== content: ', content);
+    console.log('>>>>>>>>>>>>>>>> SERVER > SSR ==================== content: ', content);
 
     const html = <Html assets={assets} content={content} />;
     const ssrHtml = `<!doctype html>${ReactDOM.renderToString(html)}`;

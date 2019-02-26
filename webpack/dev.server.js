@@ -6,9 +6,9 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const config = require('../config/config');
-const externals = require('./node-externals');
+// const externals = require('./node-externals');
 
-const loaderUtils = require('loader-utils').stringifyRequest;
+// const loaderUtils = require('loader-utils').stringifyRequest;
 
 const rootPath = path.resolve(__dirname, '..');
 const WriteFilePlugin = require('write-file-webpack-plugin');
@@ -45,7 +45,7 @@ module.exports = {
 
   name: 'server',
   target: 'node',
-  externals,
+  // externals,
   mode: 'development',
   // devtool: 'eval',  // generated code
   // devtool: false,
