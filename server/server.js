@@ -1,6 +1,7 @@
 import fs from 'fs';
 import config from '../config/config';
 import path from 'path';
+import httpProxy from 'http-proxy';
 
 // ------------------------------------------------------------------------+
 import Cookies from 'cookies';
@@ -43,6 +44,18 @@ import { flushFiles } from 'webpack-flush-chunks';
 
 import Html from '../server/utils/Html';
 
+// ----------------------------------
+
+// import apiClient from './utils/apiClient';
+// import { createApp } from './app';
+
+const targetUrl = `http://${config.apiHost}:${config.apiPort}`;
+
+const proxy = httpProxy.createProxyServer({
+  target: targetUrl,
+  ws: true
+});
+
 // ------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------
 
@@ -54,7 +67,10 @@ function reactDOMRenderToString(o, c, r) {
       </ReduxAsyncConnect>
     </StaticRouter>
   );
-}
+};
+
+// ------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
 export default ({ clientStats }) => async (req, res) => {
 
@@ -84,6 +100,8 @@ export default ({ clientStats }) => async (req, res) => {
     );
   };
 
+  res.setHeader('X-Forwarded-For', req.ip);
+
   console.log('>>>>>>>>>>>>>>>>> SERVER > REQUEST IN >>> <<<<<<<<<<<<<<<<<<<<<<<');
   // console.log('>>>>>>>>>>>>>>>>> SERVER > REQ.ip +++++++++++++: ', req.ip);
   console.log('>>>>>>>>>>>>>>>>> SERVER > REQ.method +++++++++++++++: ', req.method);
@@ -96,7 +114,35 @@ export default ({ clientStats }) => async (req, res) => {
   console.log('>>>>>>>>>>>>>>>>> SERVER > REQ.originalUrl ++++: ', req.originalUrl);
   console.log('>>>>>>>>>>>>>>>>> SERVER > REQUEST IN <<< <<<<<<<<<<<<<<<<<<<<<<<');
 
-  // #########################################################################
+  // ----------------------------------
+
+  if (req.url == '/api') {
+    console.log('>>>>>>>>>>>>>>>>> SERVER > /API <<<<<<<<<<<<<<<<<<<<<<<');
+    proxy.web(req, res, { target: targetUrl });
+    //return;
+  }
+
+  if (req.url == '/ws') {
+    console.log('>>>>>>>>>>>>>>>>> SERVER > /WS <<<<<<<<<<<<<<<<<<<<<<<');
+    proxy.web(req, res, { target: `${targetUrl}/ws` });
+    //return;
+  }
+
+  proxy.on('error', (error, req, res) => {
+    if (error.code !== 'ECONNRESET') {
+      console.error('proxy error', error);
+    }
+    if (!res.headersSent) {
+      res.writeHead(500, { 'content-type': 'application/json' });
+    }
+    const json = {
+      error: 'proxy_error',
+      reason: error.message
+    };
+    res.end(JSON.stringify(json));
+  });
+
+  // ----------------------------------
 
   console.log('>>>>>>>>>>>>>>>> SERVER > APP LOADER > SetUpComponent !! START !! <<<<<<<<<<<<<<<<<<<<<<<');
 
@@ -134,28 +180,6 @@ export default ({ clientStats }) => async (req, res) => {
 
   let preloadedState;
 
-  const context = {};
-
-  // ===============================================================================
-  // ===============================================================================
-
-  console.log('>>>>>>>>>>>>>>>>> SERVER > SPA > __DISABLE_SSR__:', __DISABLE_SSR__);
-
-  function hydrate(a) {
-    res.write('<!doctype html>');
-    ReactDOM.renderToNodeStream(<Html assets={a} />).pipe(res);
-  }
-
-  if (__DISABLE_SSR__) {
-
-    ReactDOM.renderToString( reactDOMRenderToString(req.originalUrl, context, routes) );
-
-    return hydrate( flushChunks(clientStats, {chunkNames: flushChunkNames()}) );
-  }
-
-  // ===============================================================================
-  // ===============================================================================
-
   // try {
   //   // Returns a promise of restored state (getStoredState())
   //   preloadedState = await getStoredState(persistConfig);
@@ -181,23 +205,21 @@ export default ({ clientStats }) => async (req, res) => {
 
     await trigger( 'fetch', components, locals);
 
-    // const chunkNames = [];
-    // build step and render step ARE separate
-    // const component = (
-    //   <ReportChunks report={chunkName => chunkNames.push(chunkName)}>
-    //    ...
-    //   </ReportChunks>
-    // );
+    const context = {};
 
-    // build step and render step NOT separate
-    const component = ( reactDOMRenderToString(req.originalUrl, context, routes) );
+    const component = (
+      <StaticRouter location={req.originalUrl} context={context}>
+        <ReduxAsyncConnect routes={routes} >
+          {renderRoutes(routes)}
+        </ReduxAsyncConnect>
+      </StaticRouter>
+    );
   
     const content = ReactDOM.renderToString(component);
 
     // ------------------------------------------------------------------------------------------------------
 
-
-    const assets = flushChunks(clientStats, {chunkNames: flushChunkNames()});
+    const assets = flushChunks(clientStats, { chunkNames: flushChunkNames() });
 
     console.log('>>>>>>>>>>>>>>>>> SERVER > flushChunks > JS: ', assets.Js);
     console.log('>>>>>>>>>>>>>>>>> SERVER > flushChunks > STYLES: ', assets.Styles);
@@ -217,7 +239,22 @@ export default ({ clientStats }) => async (req, res) => {
     console.log('>>>>>>>>>>>>>>>>> SERVER > flushChunks > publicPath: ', assets.publicPath);
     console.log('>>>>>>>>>>>>>>>>> SERVER > flushChunks > outputPath: ', assets.outputPath);
 
-    // ======================================================================================
+    // ===============================================================================
+    // ===============================================================================
+
+    console.log('>>>>>>>>>>>>>>>>> SERVER > __DISABLE_SSR__:', __DISABLE_SSR__);
+
+    function hydrate() {
+      res.write('<!doctype html>');
+      ReactDOM.renderToNodeStream(<Html assets={assets} />).pipe(res);
+    }
+
+    if (__DISABLE_SSR__) {
+      return hydrate();
+    }
+
+    // ===============================================================================
+    // ===============================================================================
 
     // console.log('>>>>>>>>>>>>>>>> SERVER > APP LOADER > context: ', context);
 
