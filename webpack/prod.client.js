@@ -70,9 +70,13 @@ module.exports = {
       },
       {
         test: /\.(scss)$/,
-        // exclude: /node_modules/,
         use: [
-          ExtractCssChunks.loader,
+          {
+            loader:ExtractCssChunks.loader,
+            options: {
+              modules: true
+            }
+          },
           {
             loader: 'css-loader',
             options: {
@@ -125,7 +129,12 @@ module.exports = {
       {
         test: /\.(css)$/,
         use: [
-          ExtractCssChunks.loader,
+          {
+            loader:ExtractCssChunks.loader,
+            options: {
+              modules: true
+            }
+          },
           {
             loader : 'css-loader',
             options: {

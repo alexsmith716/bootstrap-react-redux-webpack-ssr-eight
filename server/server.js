@@ -59,19 +59,6 @@ const proxy = httpProxy.createProxyServer({
 // ------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------
 
-function reactDOMRenderToString(o, c, r) {
-  return (
-    <StaticRouter location={o} context={c}>
-      <ReduxAsyncConnect routes={r} >
-        {renderRoutes(r)}
-      </ReduxAsyncConnect>
-    </StaticRouter>
-  );
-};
-
-// ------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------
-
 export default ({ clientStats }) => async (req, res) => {
 
   console.log('>>>>>>>>>>>>>>>>> SERVER > __CLIENT__ ?: ', __CLIENT__);
@@ -188,6 +175,13 @@ export default ({ clientStats }) => async (req, res) => {
   // }
   // ------------------------------------------------------------------------+
 
+  // To send the data down to the client (SSR):
+  //   create a fresh, new Redux store instance on every request;
+  //   optionally dispatch some actions;
+  //   pull the state out of store;
+  //   and then pass the state along to the client.
+
+
   try {
 
     const { components, match, params } = await asyncMatchRoutes(routes, req.path);
@@ -241,6 +235,11 @@ export default ({ clientStats }) => async (req, res) => {
 
     // ===============================================================================
     // ===============================================================================
+
+    // leaving '__DISABLE_SSR__' hydration here for requirement of 'https://github.com/faceyspacey/webpack-flush-chunks':
+    // It offers 2 functions flushChunks and flushFiles, which you call immediately after ReactDOMServer.renderToString. 
+    // They are used in server-rendering to extract the minimal amount of chunks to send to the client, 
+    // thereby solving a missing piece for code-splitting: server-side rendering.
 
     console.log('>>>>>>>>>>>>>>>>> SERVER > __DISABLE_SSR__:', __DISABLE_SSR__);
 

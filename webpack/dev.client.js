@@ -104,9 +104,15 @@ const webpackConfig = {
       },
       {
         test: /\.(scss)$/,
-        // exclude: /node_modules/,
         use: [
-          ExtractCssChunks.loader,
+          {
+            loader:ExtractCssChunks.loader,
+            options: {
+              hot: true,
+              modules: true,
+              reloadAll: true,
+            }
+          },
           {
             loader: 'css-loader',
             options: {
@@ -162,7 +168,14 @@ const webpackConfig = {
       {
         test: /\.(css)$/,
         use: [
-          ExtractCssChunks.loader,
+          {
+            loader:ExtractCssChunks.loader,
+            options: {
+              hot: true,
+              modules: true,
+              reloadAll: true,
+            }
+          },
           {
             loader : 'css-loader',
             options: {
@@ -249,10 +262,7 @@ const webpackConfig = {
       filename: '[name].[contenthash].css',
       // chunkFilename: '[name].[contenthash].chunk.css',
       // chunkFilename: '[name]-[hash:8].css',
-      hot: true,
-      // orderWarning: true,
-      reloadAll: true,
-      // cssModules: true
+      // orderWarning: true
     }),
 
     new webpack.NamedModulesPlugin(),

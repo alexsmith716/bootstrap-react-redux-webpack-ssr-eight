@@ -63,7 +63,7 @@ module.exports = {
       },
       {
         test: /\.(scss)$/,
-        // exclude: /node_modules/,
+        exclude: /node_modules/,
         use: [
           {
             loader: 'css-loader',
@@ -117,6 +117,7 @@ module.exports = {
       },
       {
         test: /\.(css)$/,
+        exclude: /node_modules/,
         use: [
           {
             loader : 'css-loader',
@@ -188,7 +189,6 @@ module.exports = {
   },
 
   resolve: {
-    modules: [ 'client', 'node_modules' ],
     extensions: ['.json', '.js', '.jsx'],
   },
 
