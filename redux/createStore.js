@@ -1,8 +1,20 @@
 import { createStore as _createStore, applyMiddleware, compose, combineReducers } from 'redux';
-import { connectRouter, routerMiddleware } from 'connected-react-router';
+import { routerMiddleware } from 'connected-react-router';
 import { createPersistoid, persistCombineReducers, REGISTER } from 'redux-persist';
 import clientMiddleware from './middleware/clientMiddleware';
 import createReducers from './reducer';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+// --------------------------------------------------------
+// const ConnectedComment = connect(commentSelector, commentActions)(CommentList);
+
+// const enhance = connect(commentListSelector, commentListActions);
+
+// The returned function is a HOC, which returns a component that is connected
+// to the Redux store
+
+// const ConnectedComment = enhance(CommentList);
+// --------------------------------------------------------
 
 // =======================================================================================
 
@@ -24,7 +36,7 @@ export function inject(store, reducers, persistConfig) {
   });
 
   // get a new root reducer
-  store.replaceReducer(combine( createReducers(store.asyncReducers), persistConfig ));
+  store.replaceReducer( combine( createReducers(history, store.asyncReducers), persistConfig ) );
 }
 
 // =======================================================================================
@@ -32,8 +44,33 @@ export function inject(store, reducers, persistConfig) {
 // NoOp action does nothing returns state and 'none' effect
 function getNoopReducers(reducers, data) {
   if (!data) return {};
-  return Object.keys(data).reduce( (prev, next) => (reducers[next] ? prev : { ...prev, [next]: (state = {}) => state }), {} );
+  return Object.keys(data).reduce(
+    (prev, next) => reducers[next]
+      ? prev
+      : {
+        ...prev,
+        [next]: (state = {}) => state
+      },
+    {}
+  );
 }
+
+// SERVER: const store = createStore({ history, providers, data: preloadedState });
+// CLIENT: const store = createStore({ history, providers, data: {...preloadedState,...window.__data,online }, persistConfig });
+// ------------------------------------------------------------------------------
+// import { getStoredState } from 'redux-persist';
+// const persistConfig = {
+//   key: 'root',
+//   storage: new CookieStorage(Cookies, {
+//     expiration: {
+//       default: config.tokenExpiration
+//     }
+//   }),
+//   stateReconciler: (inboundState, originalState) => originalState,
+//   whitelist: ['auth']
+// };
+// const preloadedState = await getStoredState(persistConfig);
+// ------------------------------------------------------------------------------
 
 // =======================================================================================
 // const store = createStore({ history, data: {...preloadedState,...window.__data,online}, helpers: providers, persistConfig });
@@ -42,6 +79,9 @@ export default function createStore({ history, data, helpers, persistConfig }) {
 
   // https://redux.js.org/advanced/middleware
   const middleware = [clientMiddleware(helpers), routerMiddleware(history)];
+
+  console.log('>>>>>>>>>>>>>>>>>>> createStore.JS > history: ', history);
+
   console.log('>>>>>>>>>>>>>>>>>>> createStore.JS > middleware 1: ', middleware);
   // -----------------------------------------
 
@@ -57,14 +97,12 @@ export default function createStore({ history, data, helpers, persistConfig }) {
 
   // -----------------------------------------
 
-  // Redux DevTool
   if (__CLIENT__ && __DEVTOOLS__) {
-
     console.log('>>>>>>>>>>>>>>>>>>> CreateStore > __CLIENT__ && __DEVTOOLS__ <<<<<<<<<<<<<<<<<<');
 
     const { persistState } = require('redux-devtools');
     const DevTools = require('../containers/DevTools/DevTools').default;
-
+    
     Array.prototype.push.apply(enhancers, [
       window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument(),
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
@@ -75,17 +113,18 @@ export default function createStore({ history, data, helpers, persistConfig }) {
 
   // Composed Enhancers
   const finalCreateStore = compose(...enhancers)(_createStore);
-  const reducers = createReducers();
+  const reducers = createReducers(history);
   const noopReducers = getNoopReducers(reducers, data);
 
   // -----------------------------------------
 
   // const store = finalCreateStore( combine({ ...noopReducers, ...reducers }, persistConfig), data);
-  const store = finalCreateStore(connectRouter(history)(combine({ ...noopReducers, ...reducers }, persistConfig)), data);
+  // const store = finalCreateStore(connectRouter(history)(combine({ ...noopReducers, ...reducers }, persistConfig)), data);
+  const store = finalCreateStore(combine({ ...noopReducers, ...reducers }, persistConfig), data);
   console.log('>>>>>>>>>>>>>>>>>>> createStore.JS > store 1: ', store);
   // -----------------------------------------
 
-  //store.asyncReducers = {};
+  store.asyncReducers = {};
 
   store.inject = _reducers => inject(store, _reducers, persistConfig);
 
@@ -102,15 +141,16 @@ export default function createStore({ history, data, helpers, persistConfig }) {
 
   // -----------------------------------------
 
-  // // https://github.com/59naga/babel-plugin-add-module-exports
-  // if (__DEVELOPMENT__ && module.hot) {
-  //   module.hot.accept('./reducer', () => {
-  //     let reducer = require('./reducer').default;
-  //     console.log('>>>>>>>>>>>>>>>>>>> createStore > createStore > reducer !!!: ', reducer);
-  //     reducer = combine((reducer.__esModule ? reducer.default : reducer)(store.asyncReducers), persistConfig);
-  //     store.replaceReducer(reducer);
-  //   });
-  // }
+  // reducers hot reloading
+  if (__DEVELOPMENT__ && module.hot) {
+    module.hot.accept('./reducer', () => {
+      let reducer = require('./reducer').default;
+      console.log('>>>>>>>>>>>>>>>>>>> createStore > createStore > reducer !!!: ', reducer);
+      reducer = combine((reducer.__esModule ? reducer.default : reducer)(store.asyncReducers), persistConfig);
+      // store.replaceReducer(connectRouter(history)(reducer));
+      store.replaceReducer(createReducers(history));
+    });
+  }
 
   // -----------------------------------------
 
