@@ -4,6 +4,8 @@ import Helmet from 'react-helmet';
 
 // import { withStore } from '../../../hoc';
 
+import CatsForm from '../../components/widgets/CatsForm/CatsForm';
+
 import Clock from '../../components/widgets/Clock/Clock';
 import RandomBootstrapAlert from '../../components/widgets/RandomBootstrapAlert/RandomBootstrapAlert';
 
@@ -23,6 +25,8 @@ class AboutOne extends Component {
 
     // thinking through react with next cool code change
     // --------------------------------------------------------------------------
+
+    this.handleDropdownChange = this.handleDropdownChange.bind(this);
 
     this.state = {
       dropDownOptionSelected: '',
@@ -57,7 +61,7 @@ class AboutOne extends Component {
     // const uri = encodeURI('/product-categories-small.json');
     // const uri = encodeURI('/product-categories.json');
 
-    const dropdownTiltle = 'Select Product Table';
+    // const dropdownTiltle = 'Select Product Table';
 
     const dropDownOptions = [
       '/product-categories-small.json',
@@ -68,6 +72,11 @@ class AboutOne extends Component {
       '/product-categories.json',
       '/product-categories-small.json',
       '/product-categories.json'
+    ];
+
+    const dropDownOptions2 = [
+      '/product-categories-small2.json',
+      '/product-categories2.json'
     ];
 
     const dropDownOptionSelected = this.state.dropDownOptionSelected;
@@ -86,6 +95,74 @@ class AboutOne extends Component {
         <h1 className={styles.uniqueColor}>About One</h1>
 
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, consequuntur, modi mollitia corporis ipsa voluptate corrupti eum ratione ex ea praesentium quibusdam? Aut, in eum facere corrupti necessitatibus perspiciatis quis?</p>
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
+
+        <div className="row">
+
+          <div className="col-lg-12 mb-4">
+
+            <div className="card h-100">
+
+              <h2 className="card-header text-center">
+                Controlled Form 1
+              </h2>
+
+              <div className="card-body">
+
+                <h5 className="card-title text-center">
+                  Cats Form
+                </h5>
+
+                <div className={`${styles.cardBodyContainer}`}>
+
+                  <div className={`${styles.cardBodyContent}`}>
+
+                    <CatsForm />
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
+
+        <div className="row">
+
+          <div className="col-lg-12 mb-4">
+
+            <div className="card h-100">
+
+              <h2 className="card-header text-center">
+                Controlled Form 2
+              </h2>
+
+              <div className="card-body">
+
+                <h5 className="card-title text-center">
+                  Cats Form
+                </h5>
+
+                <div className={`${styles.cardBodyContainer}`}>
+
+                  <div className={`${styles.cardBodyContent}`}>
+
+                    <CatsForm />
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
 
         <div className="row">
 
@@ -119,6 +196,8 @@ class AboutOne extends Component {
           </div>
         </div>
 
+        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
+
         <div className="row">
 
           <div className="col-lg-12 mb-4">
@@ -126,13 +205,13 @@ class AboutOne extends Component {
             <div className="card h-100">
 
               <h2 className="card-header text-center">
-                Thinking in React!
+                Thinking in React 1!
               </h2>
 
               <div className="card-body">
 
                 <h5 className="card-title text-center">
-                  Filterable Product Table
+                  Filterable Product Table 1
                 </h5>
 
                 <div className={`${styles.cardBodyContainer}`}>
@@ -145,7 +224,7 @@ class AboutOne extends Component {
                         <div className="width-400">
                     
                           <Dropdown
-                            title={dropdownTiltle}
+                            title={`Filterable Product Table 1`}
                             optionsArray={dropDownOptions}
                             dropDownOptionSelected={dropDownOptionSelected}
                             onDropdownChange={ this.handleDropdownChange }
@@ -169,6 +248,60 @@ class AboutOne extends Component {
           </div>
         </div>
 
+        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
+
+        <div className="row">
+
+          <div className="col-lg-12 mb-4">
+
+            <div className="card h-100">
+
+              <h2 className="card-header text-center">
+                Thinking in React 2!
+              </h2>
+
+              <div className="card-body">
+
+                <h5 className="card-title text-center">
+                  Filterable Product Table 2
+                </h5>
+
+                <div className={`${styles.cardBodyContainer}`}>
+
+                  <div className={`${styles.cardBodyContent}`}>
+
+                    <div className={`container-padding-border-radius-2`}>
+                    
+                      <div className="container-flex bg-color-ivory container-padding-border-radius-1">
+                        <div className="width-400">
+                    
+                          <Dropdown
+                            title={`Filterable Product Table 2`}
+                            optionsArray={dropDownOptions2}
+                            dropDownOptionSelected={dropDownOptionSelected}
+                            onDropdownChange={ this.handleDropdownChange }
+                          />
+                    
+                        </div>
+                      </div>
+                    
+                    </div>
+
+                    <br/>
+
+                    { filterableTable }
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
+
         <div className="row">
 
           <div className="col-lg-12 mb-4">
@@ -182,7 +315,7 @@ class AboutOne extends Component {
               <div className="card-body">
 
                 <h5 className="card-title text-center">
-                  Lifting State Up
+                  Lifting State Up 1
                 </h5>
 
                 <div className={`${styles.cardBodyContainer}`}>
@@ -199,6 +332,41 @@ class AboutOne extends Component {
             </div>
           </div>
         </div>
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
+
+        <div className="row">
+
+          <div className="col-lg-12 mb-4">
+
+            <div className="card h-100">
+
+              <h2 className="card-header text-center">
+                Thinking in React!
+              </h2>
+
+              <div className="card-body">
+
+                <h5 className="card-title text-center">
+                  Lifting State Up 2
+                </h5>
+
+                <div className={`${styles.cardBodyContainer}`}>
+
+                  <div className={`${styles.cardBodyContent}`}>
+
+                    <TemperatureCalculator />
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
 
       </div>
     );
