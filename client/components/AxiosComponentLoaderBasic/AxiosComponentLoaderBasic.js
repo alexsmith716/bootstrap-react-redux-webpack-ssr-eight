@@ -21,7 +21,7 @@ class AxiosComponentLoaderBasic extends Component {
     requestURL: PropTypes.string.isRequired
   };
 
-  // ================================================================================================
+  // --------------------------------------------------------------------------
 
   static getDerivedStateFromProps(props, state) {
     if (props.requestURL !== state.prevId) {
@@ -58,4 +58,3 @@ class AxiosComponentLoaderBasic extends Component {
 }
 
 export default AxiosComponentLoaderBasic;
-

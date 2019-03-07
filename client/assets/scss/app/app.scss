@@ -153,6 +153,11 @@ hr.light {
   display: flex;
 }
 
+.basic-border-black-1 {
+  border: calculate-rem(1px) solid #000000;
+  border-radius: calculate-rem(3px);
+}
+
 .container-padding-border-radius-1 {
   padding: calculate-rem(10px);
   border: calculate-rem(1px) solid #009900;
@@ -161,7 +166,7 @@ hr.light {
 
 .container-padding-border-radius-2 {
   padding: calculate-rem(10px);
-  border: calculate-rem(2px) solid #009900;
+  border: calculate-rem(2px) solid #B0C4DE;
   border-radius: calculate-rem(3px);
 }
 
