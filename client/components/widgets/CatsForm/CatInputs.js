@@ -46,4 +46,4 @@ const CatInputs = (props) => {
   );
 }
 
-export default CatInputs
+export default CatInputs;
