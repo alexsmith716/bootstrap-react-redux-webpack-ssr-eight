@@ -8,9 +8,9 @@ class CatsForm extends Component {
   constructor(props) {
     super(props);
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.addCat = this.addCat.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
+    // this.addCat = this.addCat.bind(this);
 
     this.state = {
       cats: [{name:'', age:''}],
@@ -32,6 +32,8 @@ class CatsForm extends Component {
       this.setState({ [e.target.name]: e.target.value.toUpperCase() })
     }
   }
+
+  // A form element becomes 'controlled' if you set its value via a prop
 
   // ============================== State Updates May Be Asynchronous =====================================
   // * React may batch multiple 'setState()' calls into a single update for performance.
@@ -73,32 +75,40 @@ class CatsForm extends Component {
       <div className="row justify-content-md-center">
         <div className="col-md-auto">
 
-          <div className="container-flex container-padding-border-radius-2">
+          <div className="container-flex bg-color-ivory container-padding-border-radius-2">
             <div className="width-600">
 
-              <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
+                <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
 
-                <div className="form-row mb-2">
+                  <div className="form-row mb-2">
 
-                  <div className="form-group col-md-6">
-                    <label htmlFor="owner">Owner</label>
-                    <input type="text" className="form-control" name="owner" id="owner" defaultValue={owner} placeholder="Owner" />
+                    <div className="form-group col-md-6">
+                      <label htmlFor="owner">Owner</label>
+                      <input type="text" className="form-control" name="owner" id="owner" defaultValue={owner} placeholder="Owner" />
+                    </div>
+
+                    <div className="form-group col-md-6">
+                      <label htmlFor="description">Description</label>
+                      <input type="text" className="form-control" name="description" id="description" defaultValue={description} placeholder="Description" />
+                    </div>
+
                   </div>
 
-                  <div className="form-group col-md-6">
-                    <label htmlFor="description">Description</label>
-                    <input type="text" className="form-control" name="description" id="description" defaultValue={description} placeholder="Description" />
+                  <div className="form-group">
+                    <CatInputs cats={cats} />
                   </div>
 
-                </div>
+                  <div className="form-row">
+                    <div className="form-group col-md-6">
+                      <button onClick={this.addCat} className="btn btn-primary">Add new cat</button>
+                    </div>
+                    <div className="form-group col-md-6">
+                      <button type="submit" className="btn btn-success">Submit</button>
+                    </div>
+                  </div>
 
-                <button onClick={this.addCat} className="btn btn-primary">Add new cat</button>
+                </form>
 
-                <CatInputs cats={cats} />
-
-                <button type="submit" className="btn btn-success">Submit</button>
-
-              </form>
             </div>
           </div>
 
