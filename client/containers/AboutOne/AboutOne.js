@@ -4,6 +4,8 @@ import Helmet from 'react-helmet';
 
 // import { withStore } from '../../../hoc';
 
+import IncorporationForm from '../../components/widgets/Shareholders/IncorporationForm';
+
 import CatsForm from '../../components/widgets/CatsForm/CatsForm';
 
 import Clock from '../../components/widgets/Clock/Clock';
@@ -95,6 +97,70 @@ class AboutOne extends Component {
         <h1 className={styles.uniqueColor}>About One</h1>
 
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, consequuntur, modi mollitia corporis ipsa voluptate corrupti eum ratione ex ea praesentium quibusdam? Aut, in eum facere corrupti necessitatibus perspiciatis quis?</p>
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
+
+        <div className="row">
+
+          <div className="col-lg-12 mb-4">
+
+            <div className="card h-100">
+
+              <h2 className="card-header text-center">
+                Thinking in React Dynamics!
+              </h2>
+
+              <div className="card-body">
+
+                <h5 className="card-title text-center">
+                  Making dynamic form inputs with React
+                </h5>
+
+                <div className={`${styles.cardBodyContainer}`}>
+
+                  <div className={`${styles.cardBodyContent}`}>
+
+                    <IncorporationForm />
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
+
+        <div className="row">
+
+          <div className="col-lg-12 mb-4">
+
+            <div className="card h-100">
+
+              <h2 className="card-header text-center">
+                Controlled Form 3
+              </h2>
+
+              <div className="card-body">
+
+                <h5 className="card-title text-center">
+                  Cats Form
+                </h5>
+
+                <div className={`${styles.cardBodyContainer}`}>
+                  <div className={`${styles.cardBodyContent}`}>
+
+                    <CatsForm />
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
 

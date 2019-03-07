@@ -11,8 +11,8 @@ import AboutThree from '../client/containers/AboutThree/Loadable';
 import AboutFour from '../client/containers/AboutFour/Loadable';
 import StickyFooter from '../client/containers/StickyFooter/Loadable';
 import BoardGames from '../client/containers/games/BoardGames/Loadable';
-// import Login from '../client/containers/Login/Loadable';
-// import Register from '../client/containers/Register/Loadable';
+import Login from '../client/containers/Login/Loadable';
+import Register from '../client/containers/Register/Loadable';
 // import LoginSuccess from '../client/containers/LoginSuccess/Loadable';
 
 // const isAuthenticated = connectedReduxRedirect({
@@ -47,8 +47,8 @@ const routes = [{
     { path: '/aboutfour', component: AboutFour },
     { path: '/stickyfooter', component: StickyFooter },
     { path: '/boardgames', component: BoardGames },
-    // { path: '/login', component: Login },
-    // { path: '/register', component: Register },
+    { path: '/login', component: Login },
+    { path: '/register', component: Register },
     // { path: '/login-success', component: isAuthenticated(LoginSuccess) },
     // { path: '/register', component: isNotAuthenticated(Register) },
     { component: NotFound }

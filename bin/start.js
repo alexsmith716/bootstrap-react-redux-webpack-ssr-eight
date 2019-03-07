@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const http = require('http');
 const favicon = require('serve-favicon');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
@@ -27,14 +27,14 @@ process.on('unhandledRejection', (error, promise) => {
   console.error('>>>>>>>> BIN > START > process > unhandledRejection > promise:', promise);
 });
 
-const dbURL = config.mongoDBmongooseURL;
-
-const mongooseOptions = {
-  autoReconnect: true,
-  keepAlive: true,
-  connectTimeoutMS: 30000,
-  useNewUrlParser: true
-};
+// const dbURL = config.mongoDBmongooseURL;
+//
+// const mongooseOptions = {
+//   autoReconnect: true,
+//   keepAlive: true,
+//   connectTimeoutMS: 30000,
+//   useNewUrlParser: true
+// };
 
 const app = express();
 const server = http.createServer(app);
@@ -99,18 +99,18 @@ server.on('listening', () => {
   const addr = server.address();
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
   console.log('>>>>>>>> BIN > START > Express server Listening on: ', bind);
-  mongoose.Promise = global.Promise;
-  mongoose.connect(
-    dbURL,
-    mongooseOptions,
-    err => {
-      if (err) {
-        console.error('>>>>>>>> BIN > START > Please make sure Mongodb is installed and running!');
-      } else {
-        console.error('>>>>>>>> BIN > START > Mongodb is installed and running!');
-      }
-    }
-  );
+  // mongoose.Promise = global.Promise;
+  // mongoose.connect(
+  //   dbURL,
+  //   mongooseOptions,
+  //   err => {
+  //     if (err) {
+  //       console.error('>>>>>>>> BIN > START > Please make sure Mongodb is installed and running!');
+  //     } else {
+  //       console.error('>>>>>>>> BIN > START > Mongodb is installed and running!');
+  //     }
+  //   }
+  // );
 });
 
 const done = () => !isBuilt
@@ -179,25 +179,30 @@ if (config.port) {
 
 // MONGOOSE CONNECTION EVENTS
 
-mongoose.connection.on('connected', () => {
-  console.log(`>>>>>>>> BIN > START > Mongoose Connection: ${dbURL}`);
-});
-
-mongoose.connection.on('error', err => {
-  console.log(`>>>>>>>> BIN > START > Mongoose Connection error: ${err}`);
-});
-
-mongoose.connection.on('disconnected', () => {
-  console.log('>>>>>>>> BIN > START > Mongoose Connection disconnected');
-});
-
-// CLOSE MONGOOSE CONNECTION
+// mongoose.connection.on('connected', () => {
+//   console.log(`>>>>>>>> BIN > START > Mongoose Connection: ${dbURL}`);
+// });
+//
+// mongoose.connection.on('error', err => {
+//   console.log(`>>>>>>>> BIN > START > Mongoose Connection error: ${err}`);
+// });
+//
+// mongoose.connection.on('disconnected', () => {
+//   console.log('>>>>>>>> BIN > START > Mongoose Connection disconnected');
+// });
+//
+// // CLOSE MONGOOSE CONNECTION
+//
+// const gracefulShutdown = (msg, cb) => {
+//   mongoose.connection.close(() => {
+//     console.log(`>>>>>>>> BIN > START > Mongoose Connection closed through: ${msg}`);
+//     cb();
+//   });
+// };
 
 const gracefulShutdown = (msg, cb) => {
-  mongoose.connection.close(() => {
-    console.log(`>>>>>>>> BIN > START > Mongoose Connection closed through: ${msg}`);
-    cb();
-  });
+  console.log(`>>>>>>>> BIN > START > Mongoose Connection closed through: ${msg}`);
+  cb();
 };
 
 // listen for Node processes / events
