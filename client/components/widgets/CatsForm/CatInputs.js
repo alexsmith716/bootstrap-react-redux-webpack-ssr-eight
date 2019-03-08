@@ -1,29 +1,60 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-const CatInputs = (props) => {
+class CatInputs extends Component {
 
-  return (
+  constructor(props) {
+    super(props);
 
-    props.cats.map((val, idx)=> {
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  // -----------------------------------------------------------
+
+  static propTypes = {
+    cats: PropTypes.array,
+    onInputChange: PropTypes.func
+  };
+
+  componentDidMount() {
+    console.log('>>>>>>>>>>>>>>>> TemperatureInput > componentDidMount <<<<<<<<<<<<<<<<<<<<<<');
+  }
+
+  componentWillUnmount() {
+    console.log('>>>>>>>>>>>>>>>> TemperatureInput > componentWillUnmount <<<<<<<<<<<<<<<<<<<<<<');
+  }
+
+  handleChange = (e) => {
+    this.props.onInputChange(e);
+  }
+
+  render() {
+
+    // const cats = this.props.cats;
+    console.log('>>>>>>>>>>>>>>>> CatInputs > RENDER !!!!!! > PROPS: ', this.props.cats);
+
+    const c = this.props.cats.map((val, idx) => {
 
       let catId = `cat-${idx}`;
       let ageId = `age-${idx}`;
 
       return (
 
-        <div className="form-row basic-border-black-1 mb-2" key={idx}>
+        <div className="form-row basic-border-goldenrod-1 mb-2" key={idx}>
 
           <div className="form-group col-md-6">
 
-            <label htmlFor={catId}>{`Cat #${idx + 1}`}</label>
+            <label htmlFor={`cat-${idx}`}>{`Cat #${idx + 1}`}</label>
 
             <input
               type="text"
-              className="name"
+              className="form-control"
               name={catId}
               data-id={idx}
               id={catId}
-              defaultValue={props.cats[idx].name}
+              value={this.props.cats[idx].name}
+              onChange={ this.handleChange }
+              placeholder="Name"
             />
           </div>
 
@@ -33,17 +64,27 @@ const CatInputs = (props) => {
 
             <input
               type="text"
-              className="age"
+              className="form-control"
               name={ageId}
               data-id={idx}
               id={ageId}
-              defaultValue={props.cats[idx].age}
+              value={this.props.cats[idx].age}
+              onChange={ this.handleChange }
+              placeholder="Age"
             />
           </div>
         </div>
       );
-    })
-  );
+    });
+
+    return (
+
+      <div className="form-group">
+        { c }
+      </div>
+
+    );
+  }
 }
 
 export default CatInputs;

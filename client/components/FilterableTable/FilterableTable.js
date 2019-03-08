@@ -13,8 +13,13 @@ import Tables from './components/Tables';
 
 class FilterableTable extends Component {
 
+  // constructor is passed object containing all props written on the component’s jsx tag
   constructor(props) {
+
+    // give the parent of the component ability to handle the props
     super(props);
+
+    // object is created and appended as attribute of the component itself and named 'state'
 
     this.state = {
       filterText: '',
