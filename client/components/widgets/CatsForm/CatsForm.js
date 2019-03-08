@@ -8,30 +8,85 @@ class CatsForm extends Component {
   constructor(props) {
     super(props);
 
-    // this.handleChange = this.handleChange.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
-    // this.addCat = this.addCat.bind(this);
-
     this.state = {
       cats: [{name:'', age:''}],
       owner: '',
       description: ''
     }
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.addCat = this.addCat.bind(this);
   }
 
+  static propTypes = {
+    // : PropTypes.string.isRequired
+  };
+
+  // static defaultProps = {};
+
+  // --------------------------------------------------------------------------
+
+  // <input type="text" class="form-control" name="cat-0" data-id="0" id="cat-0" placeholder="Name" value="">
+  // <input type="text" class="form-control" name="age-0" data-id="0" id="age-0" placeholder="Age" value="">
+  // {
+  //   "name": "",
+  //   "age": "",
+  //   "[object Object]": "C"
+  // }
+
+  // e.target.value.charAt(0).toUpperCase()+e.target.value.slice(1)
+  // Handling Multiple Inputs
+  // When you need to handle multiple controlled input elements, 
+  //  you can add a name attribute to each element 
+  //  and let the handler function choose what to do based on the value of 'event.target.name'
   handleChange = (e) => {
-    if (['name', 'age'].includes(e.target.className) ) {
-      console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 111 > e.target.name: ', e.target.className);
+
+    console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 000 > e.target: ', e.target);
+    console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 000 > e.target.name: ', e.target.name);
+    console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 000 > e.target.className: ', e.target.className);
+    console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 000 > e.target.value: ', e.target.value);
+    console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 000 > e.target.dataset.id: ', e.target.dataset.id);
+
+    // if (['name', 'age'].includes(e.target.className) ) {
+    if ( e.target.name.indexOf('cat') === 0 || e.target.name.indexOf('age') === 0 ) {
+
+      console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 111 > e.target.className: ', e.target.className);
       console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 111 > e.target.value: ', e.target.value);
-      let cats = [...this.state.cats]
-      cats[e.target.dataset.id][e.target.className] = e.target.value.toUpperCase()
-      this.setState({ cats }, () => console.log(this.state.cats))
+
+      let cats = [...this.state.cats];
+      let nameAttribute = 'name';
+
+      e.target.name.indexOf('age') === 0 ? nameAttribute = 'age' : nameAttribute = 'name';
+
+      cats[e.target.dataset.id][`${nameAttribute}`] = e.target.value;
+
+      this.setState({ cats })
+
     } else {
       console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 222 > e.target.name: ', e.target.name);
       console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 222 > e.target.value: ', e.target.value);
-      this.setState({ [e.target.name]: e.target.value.toUpperCase() })
+
+      this.setState({ [e.target.name]: e.target.value });
     }
+  };
+
+  // handleCatStateArrayInputChange = (e) => {
+  //   console.log('>>>>>>>>>>>>>>>> CatsForm > handleCatStateArrayInputChange > e.target: ', e.target);
+  // };
+
+  // --------------------------------------------------------------------------
+
+  handleSubmit = (e) => {
+
+    console.log('>>>>>>>>>>>>>>>> CatsForm > handleSubmit > this.state.cats: ', this.state.cats);
+    console.log('>>>>>>>>>>>>>>>> CatsForm > handleSubmit > this.state.owner: ', this.state.owner);
+    console.log('>>>>>>>>>>>>>>>> CatsForm > handleSubmit > this.state.description: ', this.state.description);
+
+    e.preventDefault();
   }
+
+  // --------------------------------------------------------------------------
 
   // A form element becomes 'controlled' if you set its value via a prop
 
@@ -53,12 +108,8 @@ class CatsForm extends Component {
     }));
   }
 
-  handleSubmit = (e) => {
-    console.log('>>>>>>>>>>>>>>>> CatsForm > handleSubmit > this.state.cats: ', this.state.cats);
-    console.log('>>>>>>>>>>>>>>>> CatsForm > handleSubmit > this.state.owner: ', this.state.owner);
-    console.log('>>>>>>>>>>>>>>>> CatsForm > handleSubmit > this.state.description: ', this.state.description);
-    e.preventDefault() 
-  }
+  // --------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
 
   render() {
 
@@ -78,25 +129,23 @@ class CatsForm extends Component {
           <div className="container-flex bg-color-ivory container-padding-border-radius-2">
             <div className="width-600">
 
-                <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
+                <form onSubmit={this.handleSubmit} >
 
                   <div className="form-row mb-2">
 
                     <div className="form-group col-md-6">
                       <label htmlFor="owner">Owner</label>
-                      <input type="text" className="form-control" name="owner" id="owner" defaultValue={owner} placeholder="Owner" />
+                      <input type="text" className="form-control" name="owner" id="owner" value={owner} onChange={this.handleChange} placeholder="Owner" />
                     </div>
 
                     <div className="form-group col-md-6">
                       <label htmlFor="description">Description</label>
-                      <input type="text" className="form-control" name="description" id="description" defaultValue={description} placeholder="Description" />
+                      <input type="text" className="form-control" name="description" id="description" value={description} onChange={this.handleChange} placeholder="Description" />
                     </div>
 
                   </div>
 
-                  <div className="form-group">
-                    <CatInputs cats={cats} />
-                  </div>
+                  <CatInputs cats={cats} onInputChange={ this.handleChange } />
 
                   <div className="form-row">
                     <div className="form-group col-md-6">

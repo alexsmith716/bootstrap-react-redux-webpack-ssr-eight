@@ -140,7 +140,7 @@ class AboutOne extends Component {
             <div className="card h-100">
 
               <h2 className="card-header text-center">
-                Controlled Form 3
+                Dynamic, Controlled Form 3
               </h2>
 
               <div className="card-body">
@@ -150,6 +150,7 @@ class AboutOne extends Component {
                 </h5>
 
                 <div className={`${styles.cardBodyContainer}`}>
+
                   <div className={`${styles.cardBodyContent}`}>
 
                     <CatsForm />
@@ -171,7 +172,7 @@ class AboutOne extends Component {
             <div className="card h-100">
 
               <h2 className="card-header text-center">
-                Controlled Form 1
+                Dynamic, Controlled Form 1
               </h2>
 
               <div className="card-body">
@@ -204,7 +205,7 @@ class AboutOne extends Component {
             <div className="card h-100">
 
               <h2 className="card-header text-center">
-                Controlled Form 2
+                Dynamic, Controlled Form 2
               </h2>
 
               <div className="card-body">
