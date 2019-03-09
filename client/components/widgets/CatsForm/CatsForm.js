@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import CatInputs from './CatInputs';
+import CatInputs from './catInputs';
 
 
 class CatsForm extends Component {
@@ -15,6 +15,8 @@ class CatsForm extends Component {
     }
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.addCat = this.addCat.bind(this);
   }
 
   // --------------------------------------------------------------------------
@@ -128,7 +130,7 @@ class CatsForm extends Component {
 
                   </div>
 
-                  <CatInputs cats={cats} onInputChange={ this.handleChange } />
+                  <CatInputs cats={cats} onChange={ this.handleChange } />
 
                   <div className="form-row">
                     <div className="form-group col-md-6">

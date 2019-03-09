@@ -51,19 +51,20 @@ class IncorporationForm extends Component {
         {this.state.shareholders.map((shareholder, idx) => (
 
           <div className="shareholder" key={idx}>
+
             <input
               type="text"
               placeholder={`Shareholder #${idx + 1} name`}
               value={shareholder.name}
               onChange={this.handleShareholderNameChange(idx)}
             />
+
             <button
               type="button"
               onClick={this.handleRemoveShareholder(idx)}
               className="small"
-            >
-              delete
-            </button>
+            >delete</button>
+
           </div>
 
         ))}

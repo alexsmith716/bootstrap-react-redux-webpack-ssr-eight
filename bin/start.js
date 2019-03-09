@@ -22,9 +22,19 @@ const serverConfigProd = require('../webpack/prod.server');
 
 // const outputPath = clientConfigDev.output.path;
 
-process.on('unhandledRejection', (error, promise) => {
-  console.error('>>>>>>>> BIN > START > process > unhandledRejection > error:', error);
-  console.error('>>>>>>>> BIN > START > process > unhandledRejection > promise:', promise);
+// Map will grow and shrink over time,
+// reflecting rejections that start unhandled and then become handled
+const unhandledRejections = new Map();
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('>>>>>>>> BIN > START > process > Unhandled Rejection at promise:', promise);
+  console.error('>>>>>>>> BIN > START > process > Unhandled Rejection reason:', reason);
+  unhandledRejections.set(promise, reason);
+});
+
+process.on('rejectionHandled', promise => {
+  console.error('>>>>>>>> BIN > START > process > rejectionHandled > promise:', promise);
+  unhandledRejections.delete(promise);
 });
 
 // const dbURL = config.mongoDBmongooseURL;
@@ -200,16 +210,53 @@ if (config.port) {
 //   });
 // };
 
+// #########################################################################
+
+// https://nodejs.org/api/process.html#process_process_nexttick_callback_args
+// process.nextTick(callback[, ...args])
+// 'process.nextTick()' adds callback to the "next tick queue"
+// queue is fully drained after the current operation on the JavaScript stack runs to completion
+//  and before the event loop is allowed to continue
+
+console.log('>>>>>>>>>>>>> BIN > START > Node > process.nextTick() > START <<<<<<<<<<<<<<<<');
+
+process.nextTick(() => {
+  console.log('>>>>>>>>>>>>> BIN > START > Node > process.nextTick() > nextTick CALLBACK <<<<<<<<<<<<<<<<<<<');
+});
+
+console.log('>>>>>>>>>>>>> BIN > START > Node > process.nextTick() > SCHEDULED <<<<<<<<<<<<');
+// Output:
+// start
+// scheduled
+// nextTick callback
+
+// #########################################################################
+
 const gracefulShutdown = (msg, cb) => {
   console.log(`>>>>>>>> BIN > START > Mongoose Connection closed through: ${msg}`);
   cb();
 };
 
 // listen for Node processes / events
+// https://nodejs.org/api/process.html
+
+// Node process is about to exit (called explicitly OR event loop has no additional work to perform)
+process.on('exit', code => {
+  console.log(`>>>>>>>> BIN > START > About to exit with code: ${code}`);
+});
+
+// exceptional conditions that are brought to user attention
+process.on('warning', warning => {
+  console.warn('>>>>>>>> BIN > START > Node process warning.name:', warning.name);
+  console.warn('>>>>>>>> BIN > START > Node process warning.message:', warning.message);
+  console.warn('>>>>>>>> BIN > START > Node process warning.stack:', warning.stack);
+});
+
+// listen to Node process for Signal Events
 
 // Monitor App termination
-// listen to Node process for SIGINT event
-process.on('SIGINT', () => {
+process.on('SIGINT', m => {
+  console.log('>>>>>>>> BIN > START > CHILD got Node process SIGINT message:', m);
   gracefulShutdown('app termination', () => {
     console.log('>>>>>>>> BIN > START > Mongoose SIGINT gracefulShutdown');
     process.exit(0);
@@ -217,8 +264,8 @@ process.on('SIGINT', () => {
 });
 
 // For nodemon restarts
-// listen to Node process for SIGUSR2 event
-process.once('SIGUSR2', () => {
+process.once('SIGUSR2', m => {
+  console.log('>>>>>>>> BIN > START > CHILD got Node process SIGUSR2 message:', m);
   gracefulShutdown('nodemon restart', () => {
     console.log('>>>>>>>> BIN > START > Mongoose SIGUSR2 gracefulShutdown');
     process.kill(process.pid, 'SIGUSR2');
@@ -226,8 +273,8 @@ process.once('SIGUSR2', () => {
 });
 
 // For Heroku app termination
-// listen to Node process for SIGTERM event
-process.on('SIGTERM', () => {
+process.on('SIGTERM', m => {
+  console.log('>>>>>>>> BIN > START > CHILD got Node process SIGTERM message:', m);
   gracefulShutdown('Heroku app termination', () => {
     console.log('>>>>>>>> BIN > START > Mongoose SIGTERM gracefulShutdown');
     process.exit(0);
