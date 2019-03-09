@@ -17,11 +17,11 @@ class CatInputs extends Component {
   };
 
   componentDidMount() {
-    console.log('>>>>>>>>>>>>>>>> TemperatureInput > componentDidMount <<<<<<<<<<<<<<<<<<<<<<');
+    console.log('>>>>>>>>>>>>>>>> CatInputs > componentDidMount <<<<<<<<<<<<<<<<<<<<<<');
   }
 
   componentWillUnmount() {
-    console.log('>>>>>>>>>>>>>>>> TemperatureInput > componentWillUnmount <<<<<<<<<<<<<<<<<<<<<<');
+    console.log('>>>>>>>>>>>>>>>> CatInputs > componentWillUnmount <<<<<<<<<<<<<<<<<<<<<<');
   }
 
   handleChange = (e) => {
