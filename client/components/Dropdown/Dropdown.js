@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 // STATE: private and fully controlled by the component
@@ -73,9 +73,9 @@ class Dropdown extends Component {
             <option value="">{ title }...</option>
 
             {optionsArray.map((option, index) => (
-              <React.Fragment key={index}>
+              <Fragment key={index}>
                 <option value={option}>{option}</option>
-              </React.Fragment>
+              </Fragment>
             ))}
 
           </select>
