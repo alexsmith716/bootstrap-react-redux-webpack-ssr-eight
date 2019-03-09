@@ -15,25 +15,9 @@ class CatsForm extends Component {
     }
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.addCat = this.addCat.bind(this);
   }
 
-  static propTypes = {
-    // : PropTypes.string.isRequired
-  };
-
-  // static defaultProps = {};
-
   // --------------------------------------------------------------------------
-
-  // <input type="text" class="form-control" name="cat-0" data-id="0" id="cat-0" placeholder="Name" value="">
-  // <input type="text" class="form-control" name="age-0" data-id="0" id="age-0" placeholder="Age" value="">
-  // {
-  //   "name": "",
-  //   "age": "",
-  //   "[object Object]": "C"
-  // }
 
   // e.target.value.charAt(0).toUpperCase()+e.target.value.slice(1)
   // Handling Multiple Inputs
@@ -48,7 +32,6 @@ class CatsForm extends Component {
     console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 000 > e.target.value: ', e.target.value);
     console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 000 > e.target.dataset.id: ', e.target.dataset.id);
 
-    // if (['name', 'age'].includes(e.target.className) ) {
     if ( e.target.name.indexOf('cat') === 0 || e.target.name.indexOf('age') === 0 ) {
 
       console.log('>>>>>>>>>>>>>>>> CatsForm > handleChange > 111 > e.target.className: ', e.target.className);
@@ -92,9 +75,11 @@ class CatsForm extends Component {
 
   // ============================== State Updates May Be Asynchronous =====================================
   // * React may batch multiple 'setState()' calls into a single update for performance.
-  // * Because 'this.props' and 'this.state' may be updated asynchronously, you should not rely on their values for calculating the next state.
+  // * Because 'this.props' and 'this.state' may be updated asynchronously, 
+  //    you should not rely on their values for calculating the next state.
   // * To fix it, use a second form of 'setState()' that accepts a function rather than an object. 
-  //   That function will receive the previous state as the first argument, and the props at the time the update is applied as the second argument
+  //   That function will receive the previous state as the first argument, 
+  //    and the props at the time the update is applied as the second argument
 
   //  ============================= Correct ===============================================================
   //  this.setState((state, props) => ({
@@ -118,8 +103,6 @@ class CatsForm extends Component {
     console.log('>>>>>>>>>>>>>>>> CatsForm > render() > this.state.description:', this.state.description);
 
     let {cats, owner, description} = this.state;
-
-    // defaultValue={owner}
 
     return (
 
