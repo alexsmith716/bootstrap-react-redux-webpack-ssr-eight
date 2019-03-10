@@ -153,6 +153,15 @@ hr.light {
   display: flex;
 }
 
+.boundingbox {
+  position: absolute;
+  box-shadow: 0 0 0 3px #333333 inset;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  cursor: pointer;
+}
+
 .basic-border-goldenrod-1 {
   border: calculate-rem(1px) solid #DAA520;
   border-radius: calculate-rem(3px);
