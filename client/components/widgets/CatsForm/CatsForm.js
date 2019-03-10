@@ -42,7 +42,7 @@ class CatsForm extends Component {
       let cats = [...this.state.cats];
       let nameAttribute = 'name';
 
-      e.target.name.indexOf('age') === 0 ? nameAttribute = 'age' : nameAttribute = 'name';
+      e.target.name.indexOf('age') === 0 ? nameAttribute = 'age' : null;
 
       cats[e.target.dataset.id][`${nameAttribute}`] = e.target.value;
 
@@ -75,6 +75,7 @@ class CatsForm extends Component {
 
   // A form element becomes 'controlled' if you set its value via a prop
 
+  // State and Lifecycle
   // ============================== State Updates May Be Asynchronous =====================================
   // * React may batch multiple 'setState()' calls into a single update for performance.
   // * Because 'this.props' and 'this.state' may be updated asynchronously, 

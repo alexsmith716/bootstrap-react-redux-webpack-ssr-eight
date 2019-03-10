@@ -11,7 +11,7 @@ import CatsForm from '../../components/widgets/CatsForm/CatsForm';
 import Clock from '../../components/widgets/Clock/Clock';
 import RandomBootstrapAlert from '../../components/widgets/RandomBootstrapAlert/RandomBootstrapAlert';
 
-import Dropdown from '../../components/Dropdown/Dropdown';
+// import Dropdown from '../../components/Dropdown/Dropdown';
 import FilterableTable from '../../components/FilterableTable/FilterableTable';
 
 import TemperatureCalculator from '../../components/widgets/LiftingStateUp/TemperatureCalculator';
@@ -28,11 +28,11 @@ class AboutOne extends Component {
     // thinking through react with next cool code change
     // --------------------------------------------------------------------------
 
-    this.handleDropdownChange = this.handleDropdownChange.bind(this);
+    // this.handleDropdownChange = this.handleDropdownChange.bind(this);
 
-    this.state = {
-      dropDownOptionSelected: '',
-    };
+    // this.state = {
+    //   dropDownOptionSelected: '',
+    // };
   }
 
   // static propTypes = {
@@ -41,9 +41,9 @@ class AboutOne extends Component {
 
   // static defaultProps = {};
 
-  handleDropdownChange = (dropDownOptionSelected) => {
-    this.setState( { dropDownOptionSelected } );
-  }
+  // handleDropdownChange = (dropDownOptionSelected) => {
+  //   this.setState( { dropDownOptionSelected } );
+  // }
 
   componentDidMount() {
     console.log('>>>>>>>>>>>>>>>> AboutOne > componentDidMount() <<<<<<<<<<<<<<');
@@ -81,12 +81,12 @@ class AboutOne extends Component {
       '/product-categories2.json'
     ];
 
-    const dropDownOptionSelected = this.state.dropDownOptionSelected;
-    let filterableTable;
+    // const dropDownOptionSelected = this.state.dropDownOptionSelected;
+    // let filterableTable;
 
-    if (dropDownOptionSelected !== '') {
-      filterableTable = <FilterableTable requestURL={ dropDownOptionSelected } />;
-    }
+    // if (dropDownOptionSelected !== '') {
+    //   filterableTable = <FilterableTable requestURL={ dropDownOptionSelected } />;
+    // }
 
     return (
 
@@ -107,20 +107,53 @@ class AboutOne extends Component {
             <div className="card h-100">
 
               <h2 className="card-header text-center">
-                Thinking in React Dynamics!
+                Thinking in React!
               </h2>
 
               <div className="card-body">
 
                 <h5 className="card-title text-center">
-                  Making dynamic form inputs with React
+                  Filterable Product Table 1
                 </h5>
 
                 <div className={`${styles.cardBodyContainer}`}>
 
                   <div className={`${styles.cardBodyContent}`}>
 
-                    <IncorporationForm />
+                    <FilterableTable optionsArray={dropDownOptions} />
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
+
+        <div className="row">
+
+          <div className="col-lg-12 mb-4">
+
+            <div className="card h-100">
+
+              <h2 className="card-header text-center">
+                Thinking in React!
+              </h2>
+
+              <div className="card-body">
+
+                <h5 className="card-title text-center">
+                  Filterable Product Table 2
+                </h5>
+
+                <div className={`${styles.cardBodyContainer}`}>
+
+                  <div className={`${styles.cardBodyContent}`}>
+
+                    <FilterableTable optionsArray={dropDownOptions2} />
 
                   </div>
 
@@ -156,6 +189,39 @@ class AboutOne extends Component {
                     <CatsForm />
 
                   </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
+
+        <div className="row">
+
+          <div className="col-lg-12 mb-4">
+
+            <div className="card h-100">
+
+              <h2 className="card-header text-center">
+                Thinking in React Dynamics!
+              </h2>
+
+              <div className="card-body">
+
+                <h5 className="card-title text-center">
+                  Making dynamic form inputs with React
+                </h5>
+
+                <div className={`${styles.cardBodyContainer}`}>
+
+                  <div className={`${styles.cardBodyContent}`}>
+
+                    <IncorporationForm />
+
+                  </div>
+
                 </div>
 
               </div>
@@ -257,110 +323,6 @@ class AboutOne extends Component {
               <div className="card-footer text-muted text-center">
 
                 <Clock />
-
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
-
-        <div className="row">
-
-          <div className="col-lg-12 mb-4">
-
-            <div className="card h-100">
-
-              <h2 className="card-header text-center">
-                Thinking in React 1!
-              </h2>
-
-              <div className="card-body">
-
-                <h5 className="card-title text-center">
-                  Filterable Product Table 1
-                </h5>
-
-                <div className={`${styles.cardBodyContainer}`}>
-
-                  <div className={`${styles.cardBodyContent}`}>
-
-                    <div className={`container-padding-border-radius-2`}>
-                    
-                      <div className="container-flex bg-color-ivory container-padding-border-radius-1">
-                        <div className="width-400">
-                    
-                          <Dropdown
-                            title={`Filterable Product Table 1`}
-                            optionsArray={dropDownOptions}
-                            dropDownOptionSelected={dropDownOptionSelected}
-                            onDropdownChange={ this.handleDropdownChange }
-                          />
-                    
-                        </div>
-                      </div>
-                    
-                    </div>
-
-                    <br/>
-
-                    { filterableTable }
-
-                  </div>
-
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* (>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>) */}
-
-        <div className="row">
-
-          <div className="col-lg-12 mb-4">
-
-            <div className="card h-100">
-
-              <h2 className="card-header text-center">
-                Thinking in React 2!
-              </h2>
-
-              <div className="card-body">
-
-                <h5 className="card-title text-center">
-                  Filterable Product Table 2
-                </h5>
-
-                <div className={`${styles.cardBodyContainer}`}>
-
-                  <div className={`${styles.cardBodyContent}`}>
-
-                    <div className={`container-padding-border-radius-2`}>
-                    
-                      <div className="container-flex bg-color-ivory container-padding-border-radius-1">
-                        <div className="width-400">
-                    
-                          <Dropdown
-                            title={`Filterable Product Table 2`}
-                            optionsArray={dropDownOptions2}
-                            dropDownOptionSelected={dropDownOptionSelected}
-                            onDropdownChange={ this.handleDropdownChange }
-                          />
-                    
-                        </div>
-                      </div>
-                    
-                    </div>
-
-                    <br/>
-
-                    { filterableTable }
-
-                  </div>
-
-                </div>
 
               </div>
             </div>

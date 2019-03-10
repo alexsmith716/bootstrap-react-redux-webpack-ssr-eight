@@ -6,6 +6,8 @@ import Loading from '../Loading/Loading';
 import SearchBar from './components/SearchBar';
 import Tables from './components/Tables';
 
+import Dropdown from '../Dropdown/Dropdown';
+
 // STATE: private and fully controlled by the component
 // it's input (Prop) that the component can update/change/modify
 // Because: All React components must act like pure functions with respect to their props
@@ -34,7 +36,8 @@ class FilterableTable extends Component {
   }
 
   static propTypes = {
-    requestURL: PropTypes.string.isRequired
+    optionsArray: PropTypes.array.isRequired,
+    // requestURL: PropTypes.string.isRequired
   };
 
   // static defaultProps = {};
@@ -110,14 +113,14 @@ class FilterableTable extends Component {
 
   componentDidMount() {
     console.log('>>>>>>>>>>>>>>>> FilterableTable > componentDidMount() <<<<<<<<<<<<<<');
-    this.requestDataPromise(this.props.requestURL);
+    // this.requestDataPromise(this.props.requestURL);
     // this.requestDataAsyncAwait(this.props.requestURL);
   }
 
   componentDidUpdate(prevProps, prevState) {
     console.log('>>>>>>>>>>>>>>>> FilterableTable > componentDidUpdate() <<<<<<<<<<<<<<');
     if (this.state.externalData === null) {
-      this.requestDataPromise(this.props.requestURL);
+      // this.requestDataPromise(this.props.requestURL);
     }
   }
 
