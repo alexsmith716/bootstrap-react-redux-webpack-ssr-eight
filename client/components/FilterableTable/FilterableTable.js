@@ -28,11 +28,14 @@ class FilterableTable extends Component {
       inStockOnly: false,
       isLoading: true,
       error: null,
-      externalData: null
+      externalData: null,
+      dropDownOptionSelected: ''
     };
 
     this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
     this.handleInStockChange = this.handleInStockChange.bind(this);
+
+    this.handleDropdownChange = this.handleDropdownChange.bind(this);
   }
 
   static propTypes = {
@@ -48,6 +51,10 @@ class FilterableTable extends Component {
 
   handleInStockChange(inStockOnly) {
     this.setState({ inStockOnly: inStockOnly })
+  }
+
+  handleDropdownChange = (dropDownOptionSelected) => {
+    this.setState( { dropDownOptionSelected } );
   }
 
   // ================================================================================================
@@ -132,12 +139,42 @@ class FilterableTable extends Component {
 
     const styles = require('./scss/FilterableTable.scss');
     const { isLoading, externalData } = this.state;
+    const { optionsArray } = this.props;
     const loadingText = 'Fetching Requested Data ...';
 
     console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > isLoading: ', isLoading);
     console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > externalData: ', externalData);
 
+    const dropDownOptionSelected = this.state.dropDownOptionSelected;
+
+    if (dropDownOptionSelected !== '') {
+      // filterableTable = <FilterableTable requestURL={ dropDownOptionSelected } />;
+    }
+
+    // null till working
     if (this.state.externalData === null) {
+
+      // Render data source selector
+      return (
+
+        <div className={`container-padding-border-radius-2`}>
+
+          <div className="container-flex bg-color-ivory container-padding-border-radius-1">
+            <div className="width-400">
+
+              <Dropdown
+                title={`Filterable Product Table...`}
+                optionsArray={optionsArray}
+                dropDownOptionSelected={dropDownOptionSelected}
+                onDropdownChange={ this.handleDropdownChange }
+              />
+
+            </div>
+          </div>
+        </div>
+      );
+
+    } else if (this.state.externalData === null) {
 
       // Render loading state ...
       return (
