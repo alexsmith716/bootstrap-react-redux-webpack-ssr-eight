@@ -30,6 +30,7 @@ class Dropdown extends Component {
   // ================================================================================================
 
   handleChange = (e) => {
+    console.log('>>>>>>>>>>>>>>>> Dropdown > handleChange > e.target.value: ', e.target.value);
     this.props.onDropdownChange(e.target.value);
   }
 
