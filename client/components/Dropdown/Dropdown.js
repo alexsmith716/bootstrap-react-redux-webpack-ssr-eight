@@ -11,10 +11,6 @@ class Dropdown extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      value: ''
-    };
-
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -40,11 +36,6 @@ class Dropdown extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     console.log('>>>>>>>>>>>>>>>> Dropdown > componentDidUpdate() <<<<<<<<<<<<<<');
-    if (this.state.value === '') {
-      console.log('>>>>>>>>>>>>>>>> Dropdown > componentDidUpdate() > state.value1: ', this.state.value);
-    } else {
-      console.log('>>>>>>>>>>>>>>>> Dropdown > componentDidUpdate() > state.value2: ', this.state.value);
-    }
   }
 
   componentWillUnmount() {
@@ -54,7 +45,6 @@ class Dropdown extends Component {
   render() {
 
     const { title, optionsArray, dropDownOptionSelected } = this.props;
-    const { value } = this.state;
 
     return (
 

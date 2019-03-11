@@ -6,7 +6,7 @@ import Loading from '../Loading/Loading';
 import SearchBar from './components/SearchBar';
 import Tables from './components/Tables';
 
-import Dropdown from '../Dropdown/Dropdown';
+import DropdownSelect from '../Dropdown/DropdownSelect';
 
 
 class FilterableTable extends Component {
@@ -30,7 +30,6 @@ class FilterableTable extends Component {
 
     this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
     this.handleInStockChange = this.handleInStockChange.bind(this);
-
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
   }
 
@@ -50,17 +49,25 @@ class FilterableTable extends Component {
     this.setState({ inStockOnly: inStockOnly })
   }
 
-  handleDropdownChange = (dropDownOptionSelected) => {
-    console.log('>>>>>>>>>>>>>>>> FilterableTable > handleDropdownChange > dropDownOptionSelected: ', dropDownOptionSelected);
-    this.setState( { dropDownOptionSelected } );
+  handleDropdownChange = (e) => {
+    console.log('>>>>>>>>>>>>>>>> FilterableTable > handleDropdownChange > e.target.value: ', e.target.value);
+    // let { externalData, dropDownOptionSelected } = this.state;
+
+    if (e.target.value === '') {
+      console.log('>>>>>>>>>>>>>>>> FilterableTable > handleDropdownChange > e.target.value 111');
+    } else {
+      console.log('>>>>>>>>>>>>>>>> FilterableTable > handleDropdownChange > e.target.value 222');
+    }
+    this.setState({ externalData: null, dropDownOptionSelected: e.target.value });
   }
 
   // ================================================================================================
 
   setTimeoutCallback = (d) => this.setState({ externalData: d, isLoading: false });
 
-  requestDataPromise(requestURL) {
-    this._asyncRequest = axios.get(requestURL)
+  requestDataPromise(r) {
+    console.log('>>>>>>>>>>>>>>>> FilterableTable > requestDataPromise() > dropDownOptionSelected!!: ', r);
+    this._asyncRequest = axios.get(r)
       // map the req endpoints to props
       // .then(response => {
       //   response.data.categories.map(category => ({
@@ -91,9 +98,9 @@ class FilterableTable extends Component {
       });
   }
 
-  async requestDataAsyncAwait(requestURL) {
+  async requestDataAsyncAwait(r) {
     try {
-      const response = await axios.get(requestURL);
+      const response = await axios.get(r);
       // this.setState({ externalData: response.data, isLoading: false });
       this.clearTimeoutCallbackID = setTimeout( () => this.setTimeoutCallback(response.data), 5000 );
       console.log('>>>>>>>>>>>>>>>> AxiosComponentLoaderBasic > requestDataAsyncAwait() > json > SUCCESS: ', response.data);
@@ -105,14 +112,17 @@ class FilterableTable extends Component {
 
   // ================================================================================================
 
+  // getDerivedStateFromProps: 
+  //   * lifecycle is invoked after a component is instantiated as well as before it is re-rendered
+  //   * It can return an object to update state, or null to indicate that the new props do not require any state updates
   static getDerivedStateFromProps(props, state) {
-    if (props.requestURL !== state.prevId) {
-      return {
-        externalData: null,
-        prevId: props.requestURL,
-      };
-    }
-
+    console.log('>>>>>>>>>>>>>>>> FilterableTable > static getDerivedStateFromProps() <<<<<<<<<<<<<<');
+    // if (props.requestURL !== state.prevId) {
+    //   return {
+    //     externalData: null,
+    //     prevId: props.requestURL,
+    //   };
+    // }
     return null;
   }
 
@@ -126,7 +136,7 @@ class FilterableTable extends Component {
     console.log('>>>>>>>>>>>>>>>> FilterableTable > componentDidUpdate() <<<<<<<<<<<<<<: ', this.props.description);
     const { dropDownOptionSelected } = this.state;
     if (this.state.externalData === null) {
-      this.requestDataPromise(this.state.dropDownOptionSelected);
+      this.requestDataPromise(`${dropDownOptionSelected}`);
     }
   }
 
@@ -142,9 +152,8 @@ class FilterableTable extends Component {
     const loadingText = 'Fetching Requested Data ...';
 
     console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > isLoading: ', isLoading);
+    console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > dropDownOptionSelected: ', dropDownOptionSelected);
     // console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > externalData: ', externalData);
-
-    // const dd = <Dropdown title={description} optionsArray={optionsArray} dropDownOptionSelected={dropDownOptionSelected} onDropdownChange={this.handleDropdownChange} />
 
     // ------------------------------------------------------------------------------------
 
@@ -156,11 +165,11 @@ class FilterableTable extends Component {
           <div className="container-flex bg-color-ivory container-padding-border-radius-1">
             <div className="width-400">
 
-              <Dropdown
+              <DropdownSelect
                 title={description}
                 optionsArray={optionsArray}
                 dropDownOptionSelected={dropDownOptionSelected}
-                onDropdownChange={this.handleDropdownChange}
+                onChange={this.handleDropdownChange}
               />
 
             </div>
