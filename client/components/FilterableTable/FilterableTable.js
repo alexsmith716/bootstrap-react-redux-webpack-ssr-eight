@@ -51,7 +51,7 @@ class FilterableTable extends Component {
 
   handleDropdownChange = (e) => {
     console.log('>>>>>>>>>>>>>>>> FilterableTable > handleDropdownChange > e.target.value: ', e.target.value);
-    // let { externalData, dropDownOptionSelected } = this.state;
+    let { externalData, dropDownOptionSelected } = this.state;
 
     if (e.target.value === '') {
       console.log('>>>>>>>>>>>>>>>> FilterableTable > handleDropdownChange > e.target.value 111');
