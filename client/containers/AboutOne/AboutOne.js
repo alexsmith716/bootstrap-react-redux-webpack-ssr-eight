@@ -120,7 +120,7 @@ class AboutOne extends Component {
 
                   <div className={`${styles.cardBodyContent}`}>
 
-                    <FilterableTable optionsArray={dropDownOptions} />
+                    <FilterableTable optionsArray={dropDownOptions} description='Filterable Product Table 1' />
 
                   </div>
 
@@ -153,7 +153,7 @@ class AboutOne extends Component {
 
                   <div className={`${styles.cardBodyContent}`}>
 
-                    <FilterableTable optionsArray={dropDownOptions2} />
+                    <FilterableTable optionsArray={dropDownOptions2} description='Filterable Product Table 2' />
 
                   </div>
 

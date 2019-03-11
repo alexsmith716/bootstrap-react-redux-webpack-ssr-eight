@@ -8,10 +8,6 @@ import Tables from './components/Tables';
 
 import Dropdown from '../Dropdown/Dropdown';
 
-// STATE: private and fully controlled by the component
-// it's input (Prop) that the component can update/change/modify
-// Because: All React components must act like pure functions with respect to their props
-
 
 class FilterableTable extends Component {
 
@@ -40,6 +36,7 @@ class FilterableTable extends Component {
 
   static propTypes = {
     optionsArray: PropTypes.array.isRequired,
+    description: PropTypes.string,
     // requestURL: PropTypes.string.isRequired
   };
 
@@ -54,6 +51,7 @@ class FilterableTable extends Component {
   }
 
   handleDropdownChange = (dropDownOptionSelected) => {
+    console.log('>>>>>>>>>>>>>>>> FilterableTable > handleDropdownChange > dropDownOptionSelected: ', dropDownOptionSelected);
     this.setState( { dropDownOptionSelected } );
   }
 
@@ -119,15 +117,16 @@ class FilterableTable extends Component {
   }
 
   componentDidMount() {
-    console.log('>>>>>>>>>>>>>>>> FilterableTable > componentDidMount() <<<<<<<<<<<<<<');
+    console.log('>>>>>>>>>>>>>>>> FilterableTable > componentDidMount() <<<<<<<<<<<<<<: ', this.props.description);
     // this.requestDataPromise(this.props.requestURL);
     // this.requestDataAsyncAwait(this.props.requestURL);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('>>>>>>>>>>>>>>>> FilterableTable > componentDidUpdate() <<<<<<<<<<<<<<');
+    console.log('>>>>>>>>>>>>>>>> FilterableTable > componentDidUpdate() <<<<<<<<<<<<<<: ', this.props.description);
+    const { dropDownOptionSelected } = this.state;
     if (this.state.externalData === null) {
-      // this.requestDataPromise(this.props.requestURL);
+      this.requestDataPromise(this.state.dropDownOptionSelected);
     }
   }
 
@@ -138,93 +137,83 @@ class FilterableTable extends Component {
   render() {
 
     const styles = require('./scss/FilterableTable.scss');
-    const { isLoading, externalData } = this.state;
-    const { optionsArray } = this.props;
+    const { isLoading, dropDownOptionSelected, externalData } = this.state;
+    const { optionsArray, description } = this.props;
     const loadingText = 'Fetching Requested Data ...';
 
     console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > isLoading: ', isLoading);
-    console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > externalData: ', externalData);
+    // console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > externalData: ', externalData);
 
-    const dropDownOptionSelected = this.state.dropDownOptionSelected;
+    // const dd = <Dropdown title={description} optionsArray={optionsArray} dropDownOptionSelected={dropDownOptionSelected} onDropdownChange={this.handleDropdownChange} />
 
-    if (dropDownOptionSelected !== '') {
-      // filterableTable = <FilterableTable requestURL={ dropDownOptionSelected } />;
-    }
+    // ------------------------------------------------------------------------------------
 
-    // null till working
-    if (this.state.externalData === null) {
+    return (
 
-      // Render data source selector
-      return (
+      <div>
 
         <div className={`container-padding-border-radius-2`}>
-
           <div className="container-flex bg-color-ivory container-padding-border-radius-1">
             <div className="width-400">
 
               <Dropdown
-                title={`Filterable Product Table...`}
+                title={description}
                 optionsArray={optionsArray}
                 dropDownOptionSelected={dropDownOptionSelected}
-                onDropdownChange={ this.handleDropdownChange }
+                onDropdownChange={this.handleDropdownChange}
               />
 
             </div>
           </div>
         </div>
-      );
 
-    } else if (this.state.externalData === null) {
+        <br/>
 
-      // Render loading state ...
-      return (
+        {dropDownOptionSelected !== '' &&
+          this.state.externalData === null && (
+            <div className={`container-padding-border-radius-2`}>
 
-        <div className={`container-padding-border-radius-2`}>
+              <div className="container-padding-border-radius-1">
 
-          <div className="container-padding-border-radius-1">
+                <Loading text={ loadingText } />
 
-            <Loading text={ loadingText } />
+              </div>
 
-          </div>
+            </div>
+          )}
 
-        </div>
+        {this.state.externalData !== null &&
+          <div className={`container-padding-border-radius-2`}>
 
-      );
+            <div className="container-flex bg-color-ivory container-padding-border-radius-1">
+              <div className="width-400">
 
-    } else {
+                <SearchBar 
+                  filterText={ this.state.filterText }
+                  inStockOnly={ this.state.inStockOnly }
+                  onFilterTextChange={ this.handleFilterTextChange }
+                  onInStockChange={ this.handleInStockChange }
+                />
 
-      // Render real UI ...
-      return (
+              </div>
+            </div>
 
-        <div className={`container-padding-border-radius-2`}>
+            <br />
 
-          <div className="container-flex bg-color-ivory container-padding-border-radius-1">
-            <div className="width-400">
+            <div>
 
-              <SearchBar 
+              <Tables 
+                tablesData={ externalData } 
                 filterText={ this.state.filterText }
                 inStockOnly={ this.state.inStockOnly }
-                onFilterTextChange={ this.handleFilterTextChange }
-                onInStockChange={ this.handleInStockChange }
               />
 
             </div>
           </div>
+        }
 
-          <br />
-
-          <div>
-
-            <Tables 
-              tablesData={ externalData } 
-              filterText={ this.state.filterText }
-              inStockOnly={ this.state.inStockOnly }
-            />
-
-          </div>
-        </div>
-      );
-    }
+      </div>
+    );
   }
 }
 
