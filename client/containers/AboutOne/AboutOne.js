@@ -5,15 +5,10 @@ import Helmet from 'react-helmet';
 // import { withStore } from '../../../hoc';
 
 import IncorporationForm from '../../components/widgets/Shareholders/IncorporationForm';
-
 import CatsForm from '../../components/widgets/CatsForm/CatsForm';
-
 import Clock from '../../components/widgets/Clock/Clock';
 import RandomBootstrapAlert from '../../components/widgets/RandomBootstrapAlert/RandomBootstrapAlert';
-
-// import Dropdown from '../../components/Dropdown/Dropdown';
 import FilterableTable from '../../components/FilterableTable/FilterableTable';
-
 import TemperatureCalculator from '../../components/widgets/LiftingStateUp/TemperatureCalculator';
 
 // --------------------------------------------------------------------------
@@ -28,22 +23,18 @@ class AboutOne extends Component {
     // thinking through react with next cool code change
     // --------------------------------------------------------------------------
 
-    // this.handleDropdownChange = this.handleDropdownChange.bind(this);
+    // this. = this..bind(this);
 
     // this.state = {
-    //   dropDownOptionSelected: '',
+    //
     // };
   }
 
   // static propTypes = {
-  //   store: PropTypes.objectOf(PropTypes.any).isRequired
+  //
   // };
 
   // static defaultProps = {};
-
-  // handleDropdownChange = (dropDownOptionSelected) => {
-  //   this.setState( { dropDownOptionSelected } );
-  // }
 
   componentDidMount() {
     console.log('>>>>>>>>>>>>>>>> AboutOne > componentDidMount() <<<<<<<<<<<<<<');
