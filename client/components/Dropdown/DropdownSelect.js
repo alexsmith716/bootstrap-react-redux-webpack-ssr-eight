@@ -1,6 +1,18 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
+// Fragments:
+//    A common pattern in React is for a component to return multiple elements. 
+//    Fragments let you group a list of children without adding extra nodes to the DOM.
+//    "If a parent div was used inside the render() of <Columns />, then the resulting HTML will be invalid"
+//    >>>>>>>>>>>>>>>>>>> To Render a list of child components <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// {optionsArray.map((option, index) => (
+//   <Fragment key={index}>
+//     <option value={option}>{option}</option>
+//   </Fragment>
+// ))}
+
 const DropdownSelect = props => {
 
   const { title, optionsArray, dropDownOptionSelected, onChange } = props;
@@ -31,10 +43,8 @@ const DropdownSelect = props => {
 
           <option value="">{ title }...</option>
 
-          {optionsArray.map((option, index) => (
-            <Fragment key={index}>
-              <option value={option}>{option}</option>
-            </Fragment>
+          {optionsArray.map((value, index) => (
+            <option value={value} key={index}>{value}</option>
           ))}
 
         </select>
