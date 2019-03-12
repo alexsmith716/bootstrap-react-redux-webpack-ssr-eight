@@ -53,12 +53,9 @@ class FilterableTable extends Component {
     console.log('>>>>>>>>>>>>>>>> FilterableTable > handleDropdownChange > e.target.value: ', e.target.value);
     let { externalData, dropDownOptionSelected } = this.state;
 
-    if (e.target.value === '') {
-      console.log('>>>>>>>>>>>>>>>> FilterableTable > handleDropdownChange > e.target.value 111');
-    } else {
-      console.log('>>>>>>>>>>>>>>>> FilterableTable > handleDropdownChange > e.target.value 222');
+    if (e.target.value !== '') {
+      this.setState({ externalData: null, dropDownOptionSelected: e.target.value });
     }
-    this.setState({ externalData: null, dropDownOptionSelected: e.target.value });
   }
 
   // ================================================================================================
@@ -81,7 +78,7 @@ class FilterableTable extends Component {
         console.log('>>>>>>>>>>>>>>>> FilterableTable > requestDataPromise() > json > SUCCESS2: ', response.data);
           this._asyncRequest = null;
           // this.setState({ externalData: response.data, isLoading: false });
-          this.clearTimeoutCallbackID = setTimeout( () => this.setTimeoutCallback(response.data), 5000 );
+          this.clearTimeoutCallbackID = setTimeout( () => this.setTimeoutCallback(response.data), 3000 );
       })
       .catch(error => {
         if (error.externalData) {
