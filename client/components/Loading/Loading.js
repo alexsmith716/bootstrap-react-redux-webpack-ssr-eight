@@ -12,7 +12,7 @@ class Loading extends Component {
   }
 
   static propTypes = {
-    text: PropTypes.string.isRequired
+    // text: PropTypes.string.isRequired
   };
 
   // static defaultProps = {};
