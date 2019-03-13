@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import NProgress from 'nprogress';
+// import NProgress from 'nprogress';
 import Loading from '../Loading/Loading';
 import SearchBar from './components/SearchBar';
 import Tables from './components/Tables';
-
 import DropdownSelect from '../Dropdown/DropdownSelect';
 
 
@@ -22,8 +21,8 @@ class FilterableTable extends Component {
     this.state = {
       filterText: '',
       inStockOnly: false,
+      error: false,
       isLoading: true,
-      error: null,
       externalData: null,
       dropDownOptionSelected: ''
     };
@@ -54,13 +53,15 @@ class FilterableTable extends Component {
     let { externalData, dropDownOptionSelected } = this.state;
 
     if (e.target.value !== '') {
-      this.setState({ externalData: null, dropDownOptionSelected: e.target.value });
+      this.setState({ error: false, isLoading: true, externalData: null, dropDownOptionSelected: e.target.value });
     }
   }
 
   // ================================================================================================
 
-  setTimeoutCallback = (d) => this.setState({ externalData: d, isLoading: false });
+  setTimeoutCallback = (d) => this.setState({ error: null, isLoading: null, externalData: d });
+  // test error -----------------
+  // setTimeoutCallback = (d) => this.setState({ error: true, isLoading: false, externalData: null });
 
   requestDataPromise(r) {
     console.log('>>>>>>>>>>>>>>>> FilterableTable > requestDataPromise() > dropDownOptionSelected!!: ', r);
@@ -75,10 +76,10 @@ class FilterableTable extends Component {
       //   }))
       // })
       .then(response => {
-        console.log('>>>>>>>>>>>>>>>> FilterableTable > requestDataPromise() > json > SUCCESS2: ', response.data);
-          this._asyncRequest = null;
-          // this.setState({ externalData: response.data, isLoading: false });
-          this.clearTimeoutCallbackID = setTimeout( () => this.setTimeoutCallback(response.data), 3000 );
+        console.log('>>>>>>>>>>>>>>>> FilterableTable > requestDataPromise() > json > SUCCESS!: ', response.data);
+        this._asyncRequest = null;
+        // this.setState({ externalData: response.data, isLoading: false });
+        this.clearTimeoutCallbackID = setTimeout( () => this.setTimeoutCallback(response.data), 3000 );
       })
       .catch(error => {
         if (error.externalData) {
@@ -91,21 +92,20 @@ class FilterableTable extends Component {
           console.log('>>>>>>>>>>>>>>>> FilterableTable > requestDataPromise() > json > ERROR.message: ', error.message);
         }
         console.log('>>>>>>>>>>>>>>>> FilterableTable > requestDataPromise() > json > ERROR.config: ', error.config);
-        this.setState({ error, isLoading: false });
+        this.setState({ error: true, isLoading: false, externalData: null });
       });
   }
 
-  async requestDataAsyncAwait(r) {
-    try {
-      const response = await axios.get(r);
-      // this.setState({ externalData: response.data, isLoading: false });
-      this.clearTimeoutCallbackID = setTimeout( () => this.setTimeoutCallback(response.data), 5000 );
-      console.log('>>>>>>>>>>>>>>>> AxiosComponentLoaderBasic > requestDataAsyncAwait() > json > SUCCESS: ', response.data);
-    } catch (error) {
-      console.log('>>>>>>>>>>>>>>>> AxiosComponentLoaderBasic > requestDataAsyncAwait() > json > ERROR: ', error);
-      this.setState({ error, isLoading: false });
-    }
-  }
+  // async requestDataAsyncAwait(r) {
+  //   try {
+  //     const response = await axios.get(r);
+  //     this.clearTimeoutCallbackID = setTimeout( () => this.setTimeoutCallback(response.data), 5000 );
+  //     console.log('>>>>>>>>>>>>>>>> AxiosComponentLoaderBasic > requestDataAsyncAwait() > json > SUCCESS: ', response.data);
+  //   } catch (error) {
+  //     console.log('>>>>>>>>>>>>>>>> AxiosComponentLoaderBasic > requestDataAsyncAwait() > json > ERROR: ', error);
+  //     this.setState({ error: true, isLoading: false, externalData: null });
+  //   }
+  // }
 
   // ================================================================================================
 
@@ -131,8 +131,8 @@ class FilterableTable extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     console.log('>>>>>>>>>>>>>>>> FilterableTable > componentDidUpdate() <<<<<<<<<<<<<<: ', this.props.description);
-    const { dropDownOptionSelected } = this.state;
-    if (this.state.externalData === null) {
+    const { error, isLoading, dropDownOptionSelected } = this.state;
+    if (this.state.externalData === null && !error && isLoading) {
       this.requestDataPromise(`${dropDownOptionSelected}`);
     }
   }
@@ -144,19 +144,31 @@ class FilterableTable extends Component {
   render() {
 
     const styles = require('./scss/FilterableTable.scss');
-    const { isLoading, dropDownOptionSelected, externalData } = this.state;
+    const { error, isLoading, dropDownOptionSelected, externalData } = this.state;
     const { optionsArray, description } = this.props;
     const loadingText = 'Fetching Requested Data ...';
+    const errorText = 'Error Fetching Requested Data !';
+    let items = [];
+    // <div key={index}>{`id: '${item.id}' type: '${item.type}'`}</div>
 
+    if (externalData && (dropDownOptionSelected.indexOf('https') === 0 || dropDownOptionSelected.indexOf('http') === 0)) {
+      items = externalData.map((item, index) => (
+        <div key={index}>{`${index}: ${item}`}</div>
+      ));
+      console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > ITEMS: ', items);
+    }
+
+    console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > loadingText: ', loadingText);
     console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > isLoading: ', isLoading);
     console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > dropDownOptionSelected: ', dropDownOptionSelected);
-    // console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > externalData: ', externalData);
 
     // ------------------------------------------------------------------------------------
 
     return (
 
       <div>
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>> DropdownSelect >>>>>>>>>>>>>>>>>>>>>>>>) */}
 
         <div className={`container-padding-border-radius-2`}>
           <div className="container-flex bg-color-ivory container-padding-border-radius-1">
@@ -175,48 +187,85 @@ class FilterableTable extends Component {
 
         <br/>
 
-        {dropDownOptionSelected !== '' &&
-          this.state.externalData === null && (
-            <div className={`container-padding-border-radius-2`}>
+        {/* (>>>>>>>>>>>>>>>>>>>>>> LOADING >>>>>>>>>>>>>>>>>>>>>>>>) */}
 
+        {dropDownOptionSelected !== '' &&
+          !error &&
+          isLoading && (
+
+            <div className={`container-padding-border-radius-2`}>
               <div className="container-padding-border-radius-1">
 
                 <Loading text={ loadingText } />
 
               </div>
-
             </div>
           )}
 
-        {this.state.externalData !== null &&
-          <div className={`container-padding-border-radius-2`}>
+        {/* (>>>>>>>>>>>>>>>>>>>>>> ERROR >>>>>>>>>>>>>>>>>>>>>>>>) */}
 
-            <div className="container-flex bg-color-ivory container-padding-border-radius-1">
-              <div className="width-400">
+        {error &&
+          !isLoading && (
 
-                <SearchBar 
+            <div className={`container-padding-border-radius-2`}>
+              <div className="container-padding-border-radius-1">
+
+                <div className="alert alert-danger text-center" role="alert">{ errorText }</div>
+
+              </div>
+            </div>
+          )}
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>> EXTERNAL DATA LOADED >>>>>>>>>>>>>>>>>>>>>>>>) */}
+
+        {externalData !== null &&
+          !isLoading &&
+          dropDownOptionSelected !== '' &&
+          items.length > 0 && (
+
+            <div className={`container-padding-border-radius-2`}>
+              <div className="container-padding-border-radius-1">
+
+                {items}
+
+              </div>
+            </div>
+          )}
+
+        {/* (>>>>>>>>>>>>>>>>>>>>>> LOCAL DATA LOADED >>>>>>>>>>>>>>>>>>>>>>>>) */}
+
+        {externalData !== null &&
+          !isLoading &&
+          dropDownOptionSelected !== '' &&
+          items.length === 0 && (
+
+            <div className={`container-padding-border-radius-2`}>
+              <div className="container-flex bg-color-ivory container-padding-border-radius-1">
+                <div className="width-400">
+
+                  <SearchBar 
+                    filterText={ this.state.filterText }
+                    inStockOnly={ this.state.inStockOnly }
+                    onFilterTextChange={ this.handleFilterTextChange }
+                    onInStockChange={ this.handleInStockChange }
+                  />
+
+                </div>
+              </div>
+
+              <br />
+
+              <div>
+
+                <Tables 
+                  tablesData={ externalData } 
                   filterText={ this.state.filterText }
                   inStockOnly={ this.state.inStockOnly }
-                  onFilterTextChange={ this.handleFilterTextChange }
-                  onInStockChange={ this.handleInStockChange }
                 />
 
               </div>
             </div>
-
-            <br />
-
-            <div>
-
-              <Tables 
-                tablesData={ externalData } 
-                filterText={ this.state.filterText }
-                inStockOnly={ this.state.inStockOnly }
-              />
-
-            </div>
-          </div>
-        }
+          )}
 
       </div>
     );

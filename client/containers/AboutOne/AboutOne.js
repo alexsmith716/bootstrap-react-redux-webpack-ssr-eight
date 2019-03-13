@@ -57,6 +57,8 @@ class AboutOne extends Component {
     // const dropdownTiltle = 'Select Product Table';
 
     const dropDownOptions = [
+      'https://api.github.com/events',
+      'https://api.github.com/gists/public',
       '/product-categories-small.json',
       '/product-categories.json',
       '/product-categories-small.json',
@@ -68,6 +70,8 @@ class AboutOne extends Component {
     ];
 
     const dropDownOptions2 = [
+      'https://api.github.com/events',
+      'https://api.github.com/gists/public',
       '/product-categories-small2.json',
       '/product-categories2.json'
     ];
