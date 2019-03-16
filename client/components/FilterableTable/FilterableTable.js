@@ -148,6 +148,7 @@ class FilterableTable extends Component {
     const loadingText = 'Fetching Requested Data ...';
     const errorText = 'Error Fetching Requested Data !';
     let items = null;
+    let ar = null;
     // <div key={index}>{`id: '${item.id}' type: '${item.type}'`}</div>
 
     let arrayLike = externalData && externalData.length > 0
@@ -158,7 +159,20 @@ class FilterableTable extends Component {
 
     if (externalData && (dropDownOptionSelected.indexOf('https') === 0 || dropDownOptionSelected.indexOf('http') === 0)) {
 
+      console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > externalData.length: ', externalData.length);
+
+      // convert array-like object into array
       if (arrayLike) {
+
+        // const listItems1 = Array.prototype.slice.call(externalData);
+        // listItems1.map(item => { 
+        //   console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > externalData > Array.prototype.slice.call(): ', item);
+        // });
+
+        // const listItems2 = Array.from(externalData);
+        // listItems2.map(item => { 
+        //   console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > externalData > Array.from(): ', item);
+        // });
 
         // Array.from(externalData).forEach((item, index) => {
         //   console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > Array.from()1: index: ', index, ' item: ', item);
@@ -169,13 +183,29 @@ class FilterableTable extends Component {
         //   return <div key={index}>{`${index}: ${item}`}</div>;
         // });
 
+        items = Array.from(externalData).map((item, index) => {
+          let fromItem = item;
+          let fromIndex = index;
+          let ok = Object.keys(fromItem).map((item, index) => {
+            return <div key={index}>{`${fromIndex}: ${item}: "${fromItem[item]}"`}</div>
+          })
+          return (
+            <div>
+              {ok}
+
+              {fromIndex !== externalData.length-1 && (
+                <div key={index}>---------</div>
+              )}
+            </div>
+          )
+        });
 
       } else {
 
-        // items = Object.keys(externalData).map((item, index) => {
-        //   console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > Object.keys(): index: ', index, ' item: ', item,' externalData[item]: ', externalData[item]);
-        //   return <div key={index}>{`${index}: ${item}: "${externalData[item]}"`}</div>;
-        // });
+        items = Object.keys(externalData).map((item, index) => {
+          // console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > Object.keys(): index: ', index, ' item: ', item,' externalData[item]: ', externalData[item]);
+          return <div key={index}>{`${index}: ${item}: "${externalData[item]}"`}</div>;
+        });
 
         // items = Object.keys(externalData).map((item, index) => (
         //   <div key={index}>{`${index}: ${item}: "${externalData[item]}"`}</div>
@@ -186,7 +216,7 @@ class FilterableTable extends Component {
       // console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > dropDownOptionSelected: ', dropDownOptionSelected);
       // console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > items:::::::::::::::::: ', items);
       // console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > Object.entries()::::::: ', Object.entries(externalData));
-      items = <div>{JSON.stringify(externalData)}</div>;
+      // items = <div>{JSON.stringify(externalData)}</div>;
     }
 
     // ------------------------------------------------------------------------------------
