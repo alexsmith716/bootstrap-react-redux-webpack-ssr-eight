@@ -57,23 +57,27 @@ class AboutOne extends Component {
     // const dropdownTiltle = 'Select Product Table';
 
     const dropDownOptions = [
+      'https://api.github.com/feeds',
+      'https://api.github.com/emojis',
       'https://api.github.com/events',
       'https://api.github.com/gists/public',
-      '/product-categories-small.json',
-      '/product-categories.json',
-      '/product-categories-small.json',
-      '/product-categories.json',
-      '/product-categories-small.json',
-      '/product-categories.json',
-      '/product-categories-small.json',
-      '/product-categories.json'
+      '/json-data/product-categories-small.json',
+      '/json-data/product-categories.json',
+      '/json-data/product-categories-small.json',
+      '/json-data/product-categories.json',
+      '/json-data/product-categories-small.json',
+      '/json-data/product-categories.json',
+      '/json-data/product-categories-small.json',
+      '/json-data/product-categories.json',
     ];
 
     const dropDownOptions2 = [
+      'https://api.github.com/feeds',
+      'https://api.github.com/emojis',
       'https://api.github.com/events',
       'https://api.github.com/gists/public',
-      '/product-categories-small2.json',
-      '/product-categories2.json'
+      '/json-data/product-categories-small2.json',
+      '/json-data/product-categories2.json',
     ];
 
     // const dropDownOptionSelected = this.state.dropDownOptionSelected;

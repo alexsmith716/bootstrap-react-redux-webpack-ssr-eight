@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-// import NProgress from 'nprogress';
 import Loading from '../Loading/Loading';
 import SearchBar from './components/SearchBar';
 import Tables from './components/Tables';
@@ -34,8 +33,7 @@ class FilterableTable extends Component {
 
   static propTypes = {
     optionsArray: PropTypes.array.isRequired,
-    description: PropTypes.string,
-    // requestURL: PropTypes.string.isRequired
+    description: PropTypes.string
   };
 
   // static defaultProps = {};
@@ -76,10 +74,11 @@ class FilterableTable extends Component {
       //   }))
       // })
       .then(response => {
-        console.log('>>>>>>>>>>>>>>>> FilterableTable > requestDataPromise() > json > SUCCESS!: ', response.data);
+        console.log('>>>>>>>>>>>>>>>> FilterableTable > requestDataPromise() > JSON >>>>>> response: ', response);
+        console.log('>>>>>>>>>>>>>>>> FilterableTable > requestDataPromise() > JSON > response.data: ', response.data);
         this._asyncRequest = null;
         // this.setState({ externalData: response.data, isLoading: false });
-        this.clearTimeoutCallbackID = setTimeout( () => this.setTimeoutCallback(response.data), 3000 );
+        this.clearTimeoutCallbackID = setTimeout( () => this.setTimeoutCallback(response.data), 2000 );
       })
       .catch(error => {
         if (error.externalData) {
@@ -113,7 +112,7 @@ class FilterableTable extends Component {
   //   * lifecycle is invoked after a component is instantiated as well as before it is re-rendered
   //   * It can return an object to update state, or null to indicate that the new props do not require any state updates
   static getDerivedStateFromProps(props, state) {
-    console.log('>>>>>>>>>>>>>>>> FilterableTable > static getDerivedStateFromProps() <<<<<<<<<<<<<<');
+    console.log('############################ FilterableTable > static getDerivedStateFromProps() ###########################');
     // if (props.requestURL !== state.prevId) {
     //   return {
     //     externalData: null,
@@ -148,19 +147,47 @@ class FilterableTable extends Component {
     const { optionsArray, description } = this.props;
     const loadingText = 'Fetching Requested Data ...';
     const errorText = 'Error Fetching Requested Data !';
-    let items = [];
+    let items = null;
     // <div key={index}>{`id: '${item.id}' type: '${item.type}'`}</div>
 
-    if (externalData && (dropDownOptionSelected.indexOf('https') === 0 || dropDownOptionSelected.indexOf('http') === 0)) {
-      items = externalData.map((item, index) => (
-        <div key={index}>{`${index}: ${item}`}</div>
-      ));
-      console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > ITEMS: ', items);
-    }
+    let arrayLike = externalData && externalData.length > 0
+      ? arrayLike = true
+      : arrayLike = null;
 
-    console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > loadingText: ', loadingText);
-    console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > isLoading: ', isLoading);
-    console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > STATE > dropDownOptionSelected: ', dropDownOptionSelected);
+    console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > externalData > ARRAYLIKE ??? ', arrayLike, '!');
+
+    if (externalData && (dropDownOptionSelected.indexOf('https') === 0 || dropDownOptionSelected.indexOf('http') === 0)) {
+
+      if (arrayLike) {
+
+        // Array.from(externalData).forEach((item, index) => {
+        //   console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > Array.from()1: index: ', index, ' item: ', item);
+        // });
+
+        // items = Array.from(externalData).map((item, index) => {
+        //   console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > Array.from()2: index: ', index, ' item: ', item);
+        //   return <div key={index}>{`${index}: ${item}`}</div>;
+        // });
+
+
+      } else {
+
+        // items = Object.keys(externalData).map((item, index) => {
+        //   console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > Object.keys(): index: ', index, ' item: ', item,' externalData[item]: ', externalData[item]);
+        //   return <div key={index}>{`${index}: ${item}: "${externalData[item]}"`}</div>;
+        // });
+
+        // items = Object.keys(externalData).map((item, index) => (
+        //   <div key={index}>{`${index}: ${item}: "${externalData[item]}"`}</div>
+        // ));
+
+      }
+
+      // console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > dropDownOptionSelected: ', dropDownOptionSelected);
+      // console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > items:::::::::::::::::: ', items);
+      // console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > Object.entries()::::::: ', Object.entries(externalData));
+      items = <div>{JSON.stringify(externalData)}</div>;
+    }
 
     // ------------------------------------------------------------------------------------
 
@@ -221,7 +248,7 @@ class FilterableTable extends Component {
         {externalData !== null &&
           !isLoading &&
           dropDownOptionSelected !== '' &&
-          items.length > 0 && (
+          items !== null && (
 
             <div className={`container-padding-border-radius-2`}>
               <div className="container-padding-border-radius-1">
@@ -237,7 +264,7 @@ class FilterableTable extends Component {
         {externalData !== null &&
           !isLoading &&
           dropDownOptionSelected !== '' &&
-          items.length === 0 && (
+          items === null && (
 
             <div className={`container-padding-border-radius-2`}>
               <div className="container-flex bg-color-ivory container-padding-border-radius-1">

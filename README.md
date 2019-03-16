@@ -27,6 +27,18 @@ triggers the faster 'domInteractive' event
 - Choice: keep every piece of data in Redux, to maintain a fully serializable and controlled version of the application at all times
 - Choice: keep non-critical or UI state, such as 'is this dropdown currently open', inside a component's internal state
 
+Because typeof evaluates to 'object' for all object and array values other than functions, it is useful only to distinguish objects from other, primitive types.
+
+In order to distinguish one class of object from another, you must use other techniques, such as the instanceof operator, the class attribute, or the constructor property. 
+
+Destructuring is basically a convenient way of breaking the data structure into smaller pieces to access its data more easily and extract multiple values from Objects or Arrays.
+
+'Array.from()' tries to check if its first argument is an iterable, and if it is it uses the iterator to produce values to copy into the returned array
+
+'Array.from()', if passed an array-like object, behaves the same as 'slice()' or 'apply()'
+
+'Array.from()' loops over the values accessing numerically the name properties
+
 {
   "current_user_url": "https://api.github.com/user",
   "current_user_authorizations_html_url": "https://github.com/settings/connections/applications{/client_id}",
