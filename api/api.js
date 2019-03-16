@@ -1,16 +1,16 @@
 import express from '@feathersjs/express';
-import feathers from '@feathersjs/feathers';
-import socketio from '@feathersjs/socketio';
+// import feathers from '@feathersjs/feathers';
+// import socketio from '@feathersjs/socketio';
 import morgan from 'morgan';
-import session from 'express-session';
+// import session from 'express-session';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import http from 'http';
 
-import services from './services';
-import channels from './channels';
+// import services from './services';
+// import channels from './channels';
 import apiConfig from '../config/config';
-import config from './config';
+// import config from './config';
 
 process.on('unhandledRejection', (error, promise) => {
   console.error('>>>>>> API > API > Unhandled Rejection at:', promise, 'reason:', error);
@@ -23,13 +23,14 @@ process.on('unhandledRejection', (error, promise) => {
 // *********************************************************************************************
 
 // Create the app that is a Feathers AND Express application
-const app = express(feathers());
+// const app = express(feathers());
+const app = express();
 const server = http.createServer(app);
 
-const MongoStore = require('connect-mongo')(session);
+// const MongoStore = require('connect-mongo')(session);
 
 // assign setting name 'config' to value config object 'auth' (cookie info)
-app.set('config', config);
+// app.set('config', config);
 app.use(morgan('dev'));
 app.use(cookieParser()); // parse cookie header and populate req.cookies
 
@@ -77,28 +78,28 @@ app.use(cookieParser()); // parse cookie header and populate req.cookies
 //    *** Re-use a native MongoDB driver connection (or a promise): >>> new MongoStore({ db: dbInstance })
 //    *** Create a new connection from a MongoDB connection string: >>> new MongoStore({ url: 'mongodb://localhost/test-app' })
 
-const sessionExpireDate = 6 * 60 * 60 * 1000; // 6 hours
+// const sessionExpireDate = 6 * 60 * 60 * 1000; // 6 hours
 
-app.use(
-  session({
-    secret: apiConfig.sessionSecret,
-    resave: false,
-    // rolling: true,
-    saveUninitialized: false,
-    cookie: {
-      secure: false,
-      // httpOnly: true,
-      // maxAge: apiConfig.sessionExpiration,
-      maxAge: sessionExpireDate,
-    },
-    name: 'id',
-    store: new MongoStore({
-      url: apiConfig.mongoDBsessionURL,
-      // ttl: 14 * 24 * 60 * 60 // = 14 days. Default
-      autoRemove: 'native',
-    })
-  })
-);
+// app.use(
+//   session({
+//     secret: apiConfig.sessionSecret,
+//     resave: false,
+//     // rolling: true,
+//     saveUninitialized: false,
+//     cookie: {
+//       secure: false,
+//       // httpOnly: true,
+//       // maxAge: apiConfig.sessionExpiration,
+//       maxAge: sessionExpireDate,
+//     },
+//     name: 'id',
+//     store: new MongoStore({
+//       url: apiConfig.mongoDBsessionURL,
+//       // ttl: 14 * 24 * 60 * 60 // = 14 days. Default
+//       autoRemove: 'native',
+//     })
+//   })
+// );
 
 
 // *********************************************************************************************
@@ -113,10 +114,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Set up REST transport
-app.configure(express.rest());
+// app.configure(express.rest());
 
 // Set up real-time socket transport
-app.configure(socketio({ path: '/ws' }));
+// app.configure(socketio({ path: '/ws' }));
 
 app.use((req, res, next) => {
   console.log('>>>>>>>>>>>>>>>>> API > $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ IN > $$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
@@ -132,19 +133,19 @@ app.use((req, res, next) => {
   return next();
 });
 
-app.configure(services);
-app.configure(channels);
+// app.configure(services);
+// app.configure(channels);
 
-app.use(express.notFound());
-app.use(express.errorHandler({
-  logger: {
-    error: error => {
-      if (error && error.code !== 404) {
-        console.error('>>>>>> API > API > ERROR !!!:', error);
-      }
-    }
-  }
-}));
+// app.use(express.notFound());
+// app.use(express.errorHandler({
+//   logger: {
+//     error: error => {
+//       if (error && error.code !== 404) {
+//         console.error('>>>>>> API > API > ERROR !!!:', error);
+//       }
+//     }
+//   }
+// }));
 
 server.on('listening', () => {
   const addr = server.address();
