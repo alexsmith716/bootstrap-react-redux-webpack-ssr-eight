@@ -17,20 +17,3 @@
     }
   }
 }
-
-
-Object.keys(externalData).map((item, index) => {
-  
-});
-console.log('>>>>>>>>>>>>>>>> FilterableTable > render() > Object.keys(): index: ', index, ' item: ', item,' externalData[item]: ', externalData[item]);
-
-
->>>>>>>>>>>>>>>> FilterableTable > render() > 
-
-Object.keys(): 
-
-index:  0  
-
-item:  timeline_url                                   <<<<<<<<<<<<< GIVES KEY
-
-externalData[item]:  https://github.com/timeline      <<<<<<<<<<<<< GIVES VALUE

@@ -40,6 +40,27 @@ export default PromiseTimeoutDelay;
 
 // =======================================================
 
+// function doFilter(query) {
+//   return function (user) {
+//     return query === user.name;
+//   }
+// }
+// -------------------------
+// const doFilter = query => user => query === user.name;
+// -------------------------
+// fn = user => 'foo' === user.name;
+// -------------------------
+// const doFilter = query => user => {
+//   return query === user.name;
+// }
+// -------------------------
+// <ul>
+//   {users
+//     .filter(doFilter(this.state.query))
+//     .map(user => <li>{user.name}</li>)
+//   }
+// </ul>
+
 // CURRIED FUNCTION: "const addCurried = x => y => x + y;"
 
 //    addCurried(4)

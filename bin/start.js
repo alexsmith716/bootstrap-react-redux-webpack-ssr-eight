@@ -123,6 +123,8 @@ server.on('listening', () => {
   // );
 });
 
+// start socket and 'listen' for connections (requests)
+// method: 'app.listen(path, [callback])' <<< is identical to Node's 'http.Server.listen()'
 const done = () => !isBuilt
   && server.listen(port, err => {
     isBuilt = true;
@@ -146,6 +148,11 @@ if (config.port) {
     // const serverOptions = { publicPath, stats: { colors: true } };
     const devMiddleware = webpackDevMiddleware(compiler, serverOptions);
 
+    // console.error('>>>>>>>> BIN > START > WEBPACK COMPILE > DEV > compiler: ', compiler);
+    // console.error('>>>>>>>> BIN > START > WEBPACK COMPILE > DEV > devMiddleware: ', devMiddleware);
+    // compiler: 'MultiCompiler {}'
+    // devMiddleware: 'function middleware(req, res, next) {}'
+
     app.use(devMiddleware);
     app.use(webpackHotMiddleware(clientCompiler));
     app.use(webpackHotServerMiddleware(compiler));
@@ -165,6 +172,8 @@ if (config.port) {
       }
 
       const clientStats = stats.toJson().children[0];
+
+      // console.error('>>>>>>>> BIN > START > WEBPACK COMPILE > PROD > clientStats: ', clientStats);
 
       if (stats.hasErrors()) {
         console.error('>>>>>>>> BIN > START > WEBPACK COMPILE > PROD > stats.hasErrors: ', clientStats.errors);

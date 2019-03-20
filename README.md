@@ -33,7 +33,7 @@ In order to distinguish one class of object from another, you must use other tec
 
 Destructuring is basically a convenient way of breaking the data structure into smaller pieces to access its data more easily and extract multiple values from Objects or Arrays.
 
-'Array.from()' tries to check if its first argument is an iterable, and if it is it uses the iterator to produce values to copy into the returned array
+'Array.from()' tries to check if it's first argument is an iterable, and if it is it uses the iterator to produce values to copy into the returned array
 
 'Array.from()', if passed an array-like object, behaves the same as 'slice()' or 'apply()'
 
