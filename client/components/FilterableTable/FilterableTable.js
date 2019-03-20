@@ -9,7 +9,7 @@ import DropdownSelect from '../Dropdown/DropdownSelect';
 
 class FilterableTable extends Component {
 
-  // constructor is passed object containing all props written on the component’s jsx tag
+  // constructor is passed object containing all props written on component jsx tag
   constructor(props) {
 
     // give the parent of the component ability to handle the props
@@ -148,7 +148,6 @@ class FilterableTable extends Component {
     const loadingText = 'Fetching Requested Data ...';
     const errorText = 'Error Fetching Requested Data !';
     let items = null;
-    let ar = null;
     // <div key={index}>{`id: '${item.id}' type: '${item.type}'`}</div>
 
     let arrayLike = externalData && externalData.length > 0
@@ -184,11 +183,13 @@ class FilterableTable extends Component {
         // });
 
         items = Array.from(externalData).map((item, index) => {
+
           let fromItem = item;
           let fromIndex = index;
           let ok = Object.keys(fromItem).map((item, index) => {
             return <div key={index}>{`${fromIndex}: ${item}: "${fromItem[item]}"`}</div>
           })
+
           return (
             <div>
               {ok}

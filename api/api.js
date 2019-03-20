@@ -1,4 +1,5 @@
-import express from '@feathersjs/express';
+// import express from '@feathersjs/express';
+import express from 'express';
 // import feathers from '@feathersjs/feathers';
 // import socketio from '@feathersjs/socketio';
 import morgan from 'morgan';

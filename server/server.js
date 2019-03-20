@@ -31,6 +31,14 @@ import { renderRoutes } from 'react-router-config';
 import ReactDOM from 'react-dom/server';
 // ----------------------------------
 
+// ----------------------------------
+// Redux Store
+// import configureStore from '../shared/redux/configureStore';
+
+// Initial State
+// import initialState from './initialState';
+// ----------------------------------
+
 import createMemoryHistory from 'history/createMemoryHistory';
 
 import routes from '../shared/routes';
@@ -53,11 +61,22 @@ const targetUrl = `http://${config.apiHost}:${config.apiPort}`;
 
 const proxy = httpProxy.createProxyServer({
   target: targetUrl,
-  ws: true
+  // ws: true
 });
 
 // ------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------
+
+// HOF is a function which returns a function
+// ---------------------------------------------------------------
+// const render = require('../build/server/server.js').default;
+// app.use(render({ clientStats }));
+// ---------------------------------------------------------------
+// app.use(function render({ clientStats }) {
+//   return function async (req, res) {
+//     return ...;
+//   }
+// })
 
 export default ({ clientStats }) => async (req, res) => {
 
@@ -103,16 +122,18 @@ export default ({ clientStats }) => async (req, res) => {
 
   // ----------------------------------
 
+  // https://reactjs.org/docs/higher-order-components.html
+  // @feathersjs:
+  // HOC doesn’t modify the input component, nor does it use inheritance to copy its behavior
+  // HOC composes the original component by wrapping it in a container component
   if (req.url == '/api') {
     console.log('>>>>>>>>>>>>>>>>> SERVER > /API <<<<<<<<<<<<<<<<<<<<<<<');
     proxy.web(req, res, { target: targetUrl });
-    //return;
   }
 
   if (req.url == '/ws') {
     console.log('>>>>>>>>>>>>>>>>> SERVER > /WS <<<<<<<<<<<<<<<<<<<<<<<');
     proxy.web(req, res, { target: `${targetUrl}/ws` });
-    //return;
   }
 
   proxy.on('error', (error, req, res) => {
@@ -139,7 +160,7 @@ export default ({ clientStats }) => async (req, res) => {
   console.log('>>>>>>>>>>>>>>>>>>> SERVER.JS > APP LOADER > history: ', history)
 
   // ------------------------------------------------------------------------+
-  const cookieJar = new NodeCookiesWrapper(new Cookies(req, res)); // node module for getting and setting HTTP cookies
+  // const cookieJar = new NodeCookiesWrapper(new Cookies(req, res)); // node module for getting and setting HTTP cookies
 
   // type PersistConfig:
   // {
@@ -158,14 +179,14 @@ export default ({ clientStats }) => async (req, res) => {
   //   writeFailHandler?: Function, // will be called if the storage engine fails during setItem()
   // }
 
-  const persistConfig = {
-    key: 'root',
-    storage: new CookieStorage(cookieJar),
-    stateReconciler: (inboundState, originalState) => originalState,
-    whitelist: ['auth', 'info',]
-  };
+  // const persistConfig = {
+  //   key: 'root',
+  //   storage: new CookieStorage(cookieJar),
+  //   stateReconciler: (inboundState, originalState) => originalState,
+  //   whitelist: ['auth', 'info',]
+  // };
 
-  let preloadedState;
+  // let preloadedState;
 
   // try {
   //   // Returns a promise of restored state (getStoredState())
@@ -180,6 +201,9 @@ export default ({ clientStats }) => async (req, res) => {
   //   optionally dispatch some actions;
   //   pull the state out of store;
   //   and then pass the state along to the client.
+
+  // Configure Redux Store
+  // const store = configureStore(initialState(req));
 
 
   try {

@@ -1,6 +1,6 @@
 
-global.__CLIENT__ = true;
-global.__SERVER__ = false;
+// global.__CLIENT__ = true;
+// global.__SERVER__ = false;
 
 const path = require('path');
 const webpack = require('webpack');
